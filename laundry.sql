@@ -24,6 +24,7 @@ CREATE TABLE tb_member (
     alamat TEXT NOT NULL,
     jenis_kelamin ENUM('L', 'P') NOT NULL,
     tlp VARCHAR(15) NOT NULL
+    no_ktp VARCHAR(30) DEFAULT NULL
 );
 
 -- Tabel tb_paket
@@ -63,6 +64,7 @@ CREATE TABLE tb_detail_transaksi (
     id_paket INT(11),
     qty DOUBLE NOT NULL,
     keterangan TEXT,
+    total_bayar INT(11) DEFAULT NULL,
     FOREIGN KEY (id_transaksi) REFERENCES tb_transaksi(id) ON DELETE CASCADE,
     FOREIGN KEY (id_paket) REFERENCES tb_paket(id) ON DELETE CASCADE
 );
@@ -81,10 +83,10 @@ INSERT INTO tb_user (nama, username, password, id_outlet, role) VALUES
 ('Kasir C', 'kasirC', '$2y$10$c0AhxxopdFHlokk0aDcSXuTomN7bCb49c0.cAzGErPx/7oJB04UOS', 2, 'kasir');
 
 -- Data dummy untuk tb_member
-INSERT INTO tb_member (nama, alamat, jenis_kelamin, tlp) VALUES
-('Budi', 'Jalan Mawar No.3', 'L', '081345678901'),
-('Siti', 'Jalan Melati No.4', 'P', '081345678902'),
-('Ali', 'Jalan Anggrek No.5', 'L', '081345678903');
+INSERT INTO tb_member (nama, alamat, jenis_kelamin, tlp, no_ktp) VALUES
+('Budi', 'Jalan Mawar No.3', 'L', '081345678901', '31740213456789712'),
+('Siti', 'Jalan Melati No.4', 'P', '081345678902', '31740213456789713'),
+('Ali', 'Jalan Anggrek No.5', 'L', '081345678903', '31740213456789714');
 
 -- Data dummy untuk tb_paket
 INSERT INTO tb_paket (id_outlet, jenis, nama_paket, harga) VALUES
@@ -100,8 +102,8 @@ INSERT INTO tb_transaksi (id_outlet, kode_invoice, id_member, tgl, batas_waktu, 
 (2, 'INV003', 3, '2025-01-03 12:00:00', '2025-01-05 12:00:00', NULL, 2000, 0.0, 500, 'baru', 'belum_dibayar', 4);
 
 -- Data dummy untuk tb_detail_transaksi
-INSERT INTO tb_detail_transaksi (id_transaksi, id_paket, qty, keterangan) VALUES
-(1, 1, 2.5, 'Cuci pakaian sehari-hari'),
-(1, 2, 1, 'Cuci selimut ukuran besar'),
-(2, 3, 3, 'Cuci kaos olahraga'),
-(3, 4, 2, 'Cuci sepatu hiking');
+INSERT INTO tb_detail_transaksi (id_transaksi, id_paket, qty, keterangan, total_bayar) VALUES
+(1, 1, 2.5, 'Cuci pakaian sehari-hari', 15000),
+(1, 2, 1, 'Cuci selimut ukuran besar', 20000),
+(2, 3, 3, 'Cuci kaos olahraga', 15000),
+(3, 4, 2, 'Cuci sepatu hiking', 15000);

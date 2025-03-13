@@ -1,3 +1,34 @@
+<?php
+
+require_once "../function.php";
+
+$transaksi = query("SELECT 
+    t.id,
+    t.kode_invoice AS kode_invoice,
+    m.nama AS nama_member,
+    o.nama AS nama_outlet,
+    t.diskon AS diskon,
+    t.biaya_tambahan AS biaya_tambahan,
+    t.pajak AS pajak,
+    t.status AS status,
+    t.dibayar AS pembayaran,
+    dt.total_bayar AS total_bayar
+FROM 
+    tb_transaksi t
+INNER JOIN 
+    tb_member m ON t.id_member = m.id
+INNER JOIN 
+    tb_outlet o ON t.id_outlet = o.id
+INNER JOIN 
+    tb_detail_transaksi dt ON dt.id_transaksi = t.id
+");
+// var_dump(mysqli_error($conn));
+// var_dump($transaksi);
+// die();
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +58,7 @@
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -40,7 +71,7 @@
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
-        <!-- ============================================================== -->
+    <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
     <div id="wrapper">
@@ -59,7 +90,7 @@
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span> 
+                        </span>
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -109,103 +140,87 @@
                     </li>
                 </ul>
                 <div class="center p-20">
-                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                 </div>
+                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                </div>
             </div>
-            
+
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-               <!-- ============================================================== -->
+        <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper"> 
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">Data Master transaksi</h4> </div>
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-            <ol class="breadcrumb">
-                <li><a href="#">Paket</a></li>
-            </ol>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <div class="row">
-        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <div class="white-box">
-                <div class="row">
-                    <div class="col-md-6">
-                        <a href="transaksi_cari_member.php" class="btn btn-primary box-title"><i class="fa fa-plus fa-fw"></i> Tambah</a>
-                         <a href="transaksi_konfirmasi.php" class="btn btn-primary box-title"><i class="fa fa-check fa-fw"></i> Konfirmasi Pembayaran</a>
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">Data Master transaksi</h4>
                     </div>
-                    <div class="col-md-6 text-right">
-                        <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <ol class="breadcrumb">
+                            <li><a href="transaksi.php">Transaksi</a></li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="transaksi_cari_member.php" class="btn btn-primary box-title"><i class="fa fa-plus fa-fw"></i> Tambah</a>
+                                    <a href="transaksi_konfirmasi.php" class="btn btn-primary box-title"><i class="fa fa-check fa-fw"></i> Konfirmasi Pembayaran</a>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered thead-dark" id="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Invoice</th>
+                                            <th>Member</th>
+                                            <th>Status</th>
+                                            <th>Pemabayaran</th>
+                                            <th>Total Harga</th>
+                                            <th width="15%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i = 1; ?>
+                                        <?php foreach ($transaksi as $data) : ?>
+                                            <tr>
+                                                <td><?= $i; ?></td>
+                                                <td><?= $data['kode_invoice']; ?></td>
+                                                <td><?= $data['nama_member']; ?></td>
+                                                </td>
+                                                <td><?= $data['status']; ?></td>
+                                                <td><?= $data['pembayaran']; ?></td>
+                                                <td><?= $data['total_bayar']; ?></td>
+                                                <td align="center">
+                                                    <a href="transaksi_detail.php?id=<?= $data['id']; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
+                                                </td>
+                                            </tr>
+                                        <?php $i++;
+                                        endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered thead-dark" id="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>#</th>
-                                <th>Invoice</th>
-                                <th>Member</th>
-                                <th>Status</th>
-                                <th>Pemabayaran</th>
-                                <th>Total Harga</th>
-                                <th width="15%">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                                                            <tr>
-                                    <td></td>
-                                    <td>DRY202501112841</td>
-                                    <td>Alexander Romario</td>
-                                    <td>selesai</td>
-                                    <td>dibayar</td>
-                                    <td>100000</td>
-                                    <td align="center">
-                                          <a href="transaksi_detail.php?id=36" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <td></td>
-                                    <td>DRY202501114457</td>
-                                    <td>Kailendra</td>
-                                    <td>diambil</td>
-                                    <td>dibayar</td>
-                                    <td>60000</td>
-                                    <td align="center">
-                                          <a href="transaksi_detail.php?id=37" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <td></td>
-                                    <td>DRY202501115359</td>
-                                    <td>Alexander Romario</td>
-                                    <td>selesai</td>
-                                    <td>dibayar</td>
-                                    <td>120000</td>
-                                    <td align="center">
-                                          <a href="transaksi_detail.php?id=38" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                    </td>
-                                </tr>
-                                                    </tbody>
-                    </table>
+                <!-- ============================================================== -->
+                <!-- table -->
+                <!-- ============================================================== -->
+                <div class="row">
+
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- table -->
-    <!-- ============================================================== -->
-    <div class="row">
-        
-    </div>
-</div>
-<!-- /.container-fluid -->
-<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -240,58 +255,62 @@
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click',() => {
+        $('#btn_hapus').on('click', () => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready( function () {
+        $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [ {
+                "columnDefs": [{
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                } ],
-                "order": [[ 1, 'asc' ]],
-                "language" : {
-                    "sProcessing" : "Sedang memproses ...",
-                    "lengthMenu" : "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord" : "Maaf data tidak tersedia",
-                    "info" : "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty" : "Tidak ada data yang tersedia",
-                    "infoFiltered" : "(difilter dari _MAX_ total data)",
-                    "sSearch" : "Cari",
-                    "oPaginate" : {
-                        "sFirst" : "Pertama",
-                        "sPrevious" : "Sebelumnya",
-                        "sNext" : "Selanjutnya",
-                        "sLast" : "Terakhir"
+                }],
+                "order": [
+                    [1, 'asc']
+                ],
+                "language": {
+                    "sProcessing": "Sedang memproses ...",
+                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                    "zeroRecord": "Maaf data tidak tersedia",
+                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
+                    "infoEmpty": "Tidak ada data yang tersedia",
+                    "infoFiltered": "(difilter dari _MAX_ total data)",
+                    "sSearch": "Cari",
+                    "oPaginate": {
+                        "sFirst": "Pertama",
+                        "sPrevious": "Sebelumnya",
+                        "sNext": "Selanjutnya",
+                        "sLast": "Terakhir"
                     }
                 }
             });
-            t.on( 'order.dt search.dt', function () {
-                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-                    cell.innerHTML = i+1;
-                } );
-            } ).draw();
+            t.on('order.dt search.dt', function() {
+                t.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
 
-            
-        } );
-        $('#btn-refresh').on('click',() => {
+
+        });
+        $('#btn-refresh').on('click', () => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if(index == -1){
+            if (index == -1) {
                 window.location = window.location.href;
-                
-            }
-            if(index != -1){
-                window.location = oldURL.substring(0,index)
-            }
-            
-        });
 
+            }
+            if (index != -1) {
+                window.location = oldURL.substring(0, index)
+            }
+
+        });
     </script>
 
     <br />

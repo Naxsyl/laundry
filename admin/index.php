@@ -1,12 +1,12 @@
 <?php
 
 $title = "Dashboard";
-require_once 'function.php';
-$jTransaksi = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_transaksi");
-$jPelanggan = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_pelanggan");
-$outlet = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_outlet");
+// require_once 'function.php';
+// $jTransaksi = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_transaksi");
+// $jPelanggan = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_pelanggan");
+// $outlet = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_outlet");
 
-$query = "SELECT tb_transaksi.*, member.nama_member, detail_transaksi. "
+// $query = "SELECT tb_transaksi.*, member.nama_member, detail_transaksi. "
 
 ?>
 

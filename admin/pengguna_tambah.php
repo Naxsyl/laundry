@@ -205,6 +205,7 @@ if (isset($_POST["btn-simpan"])) {
                                 <div class="form-group">
                                     <label>Jika Role Nya Kasir Maka Pilih Outlet Dimana Dia Akan Ditempatkan</label>
                                     <select name="outlet_id" class="form-control">
+                                        <option value="">Pilih Outlet</option>
                                         <?php foreach ($outlet as $row) : ?>
                                             <option value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
                                         <?php endforeach; ?>

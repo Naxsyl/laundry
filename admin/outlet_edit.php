@@ -3,10 +3,13 @@ require_once '../function.php';
 
 $id = $_GET["id"];
 $outlet = query("SELECT * FROM tb_outlet WHERE id = $id")[0];
-// var_dump($outlet);
+$owner = query("SELECT id, nama FROM tb_user WHERE role = 'owner' AND id_outlet = $id")[0];
+$owners = query("SELECT id, nama FROM tb_user WHERE role = 'owner' AND id_outlet IS NULL");
+// var_dump($owners);
 // die();
 
 if (isset($_POST["btn-simpan"])) {
+    // die(var_dump($_POST));
 
     // cek apakah data berhasil di tambahkan atau tidak 
     if (ubah_outlet($_POST) > 0) {
@@ -181,6 +184,7 @@ if (isset($_POST["btn-simpan"])) {
                         <div class="white-box">
                             <form method="post" action="">
                                 <input type="hidden" name="id_outlet" value="<?= $outlet["id"]; ?>">
+                                <input type="hidden" name="id_owner" value="<?= $owner["id"]; ?>">
                                 <div class="form-group">
                                     <label>Nama Outlet</label>
                                     <input type="text" value="<?= $outlet['nama']; ?>" name="nama_outlet" class="form-control">
@@ -193,20 +197,15 @@ if (isset($_POST["btn-simpan"])) {
                                     <label>Nomor Telepon</label>
                                     <input type="text" value="<?= $outlet['tlp']; ?>" name="telp_outlet" class="form-control">
                                 </div>
-                                <!-- <div class="form-group">
-                                    <label>Owner Sekarang : Khadafi</label>
+                                <div class="form-group">
+                                    <label>Owner Sekarang : <?= $owner ? $owner['nama'] : 'belum ada owner'; ?></label>
                                     <select name="owner_id_new" class="form-control">
-                                        <option class="">Pilih Untuk Mengganti owner</option>
-                                        <option value="10">Sepdullah
-                                            ( Owner di Londre Cab. Pasar Minggu )
-
-                                        </option>
-                                        <option value="13">Khadafi
-                                            ( Owner di Londre Cab. Mampang Prapatan )
-
-                                        </option>
+                                        <option value="<?= $owner ? $owner['id'] : ''; ?>"><?= $owner ? $owner['nama'] : 'Pilih Owner'; ?></option>
+                                        <?php foreach ($owners as $row) : ?>
+                                            <option value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
+                                        <?php endforeach; ?>
                                     </select>
-                                </div> -->
+                                </div>
                                 <div class="text-right">
                                     <button type="reset" class="btn btn-danger">Reset</button>
                                     <button type="submit" name="btn-simpan" class="btn btn-primary">Simpan</button>

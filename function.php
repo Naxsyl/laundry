@@ -70,7 +70,13 @@ function tambah_user($data)
 
     $password = password_hash($password, PASSWORD_DEFAULT);
 
-    $hasil = mysqli_query($conn, "INSERT INTO tb_user VALUES ('', '$nama', '$username', '$password', '$outlet', '$role')");
+    if ($outlet) {
+
+        mysqli_query($conn, "INSERT INTO tb_user VALUES ('', '$nama', '$username', '$password', '$outlet', '$role')");
+    } else {
+
+        mysqli_query($conn, "INSERT INTO tb_user VALUES ('', '$nama', '$username', '$password', NULL, '$role')");
+    }
 
     // if (!$hasil) {
     //     die("Query gagal: " . mysqli_error($conn));
@@ -79,22 +85,65 @@ function tambah_user($data)
     return mysqli_affected_rows($conn);
 }
 
+function tambah_member($data)
+{
+    global $conn;
+
+    $no_ktp = htmlspecialchars($data['no_ktp']);
+    $nama_member = htmlspecialchars($data['nama_member']);
+    $alamat_member = htmlspecialchars(ucwords($data['alamat_member']));
+    $telp_member = htmlspecialchars($data['telp_member']);
+    $jenis_kelamin = htmlspecialchars($data['jenis_kelamin']);
+
+    $result = mysqli_query($conn, "SELECT no_ktp FROM tb_member WHERE no_ktp = '$no_ktp'");
+
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>alert('No KTP sudah digunakan!');</script>";
+        return false;
+    }
+    $query = "INSERT INTO tb_member VALUES ('', '$nama_member', '$alamat_member', '$jenis_kelamin', '$telp_member', '$no_ktp')";
+
+    mysqli_query($conn, $query);
+    return mysqli_affected_rows($conn);
+
+    if (!$query) {
+        die("Query gagal: " . mysqli_error($conn));
+    }
+}
+
+
+
 function ubah_outlet($data)
 {
     global $conn;
 
     $id_outlet = $data["id_outlet"];
+    $owner = $data["id_owner"];
     $nama_outlet = htmlspecialchars($data["nama_outlet"]);
     $alamat_outlet = htmlspecialchars($data["alamat_outlet"]);
     $telp_outlet = htmlspecialchars($data["telp_outlet"]);
+    $ownerbaru = htmlspecialchars($data["owner_id_new"]);
 
-    // $owner = htmlspecialchars($data["owner_id_new"]);
 
     $query = "UPDATE tb_outlet SET nama = '$nama_outlet', alamat = '$alamat_outlet', tlp = '$telp_outlet' WHERE id = '$id_outlet'";
+    $hasil = mysqli_query($conn, $query);
 
-    mysqli_query($conn, $query);
 
-    return mysqli_affected_rows($conn);
+
+    if ($ownerbaru !== $owner) {
+        $query3 = "UPDATE tb_user SET id_outlet = NULL WHERE id = '$owner'";
+        $hasil3 = mysqli_query($conn, $query3);
+    }
+
+    $query2 = "UPDATE tb_user SET id_outlet = '$id_outlet' WHERE id = '$ownerbaru'";
+    $hasil2 = mysqli_query($conn, $query2);
+
+
+    if ($hasil && $hasil2 || $hasil3) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function ubah_paket($data)
@@ -158,6 +207,43 @@ function ubah_user($data)
     if (!$result) {
         die("Query gagal: " . mysqli_error($conn));
     }
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubah_member($data)
+{
+    global $conn;
+
+    $id_member = $data["id"];
+    $no_ktp = htmlspecialchars($data['no_ktp']);
+    $nama_member = htmlspecialchars($data['nama_member']);
+    $alamat_member = htmlspecialchars(ucwords($data['alamat_member']));
+    $telp_member = htmlspecialchars($data['telp_member']);
+    $jenis_kelamin = htmlspecialchars($data['jenis_kelamin']);
+
+    $result = mysqli_query($conn, "SELECT no_ktp FROM tb_member WHERE no_ktp = '$no_ktp'");
+
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>alert('No KTP sudah digunakan!');</script>";
+        return false;
+    }
+
+    $query = "UPDATE tb_member SET no_ktp = '$no_ktp', nama = '$nama_member', alamat = '$alamat_member', jenis_kelamin = '$jenis_kelamin', tlp = '$telp_member' WHERE id = '$id_member'";
+
+    $result2 = mysqli_query($conn, $query);
+
+    if (!$result2) {
+        die("Query gagal: " . mysqli_error($conn));
+    }
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapus_member($id)
+{
+    global $conn;
+    mysqli_query($conn, "DELETE FROM tb_member WHERE id = $id");
 
     return mysqli_affected_rows($conn);
 }

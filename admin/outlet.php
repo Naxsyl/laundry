@@ -9,18 +9,20 @@ session_start();
 require_once '../function.php';
 
 // $outlet = query("SELECT * FROM tb_outlet");
-$outlet = query("
-    SELECT 
-        o.id AS outlet_id,
-        o.nama AS outlet_nama,
-        o.alamat AS outlet_alamat,
-        o.tlp AS outlet_tlp,
-        u.id AS owner_id,
-        u.nama AS owner_nama,
-        u.username AS owner_username
-    FROM tb_outlet o
-    LEFT JOIN tb_user u ON o.id = u.id_outlet AND u.role = 'owner'
-");
+// $outlet = query("
+//     SELECT 
+//         o.id AS outlet_id,
+//         o.nama AS outlet_nama,
+//         o.alamat AS outlet_alamat,
+//         o.tlp AS outlet_tlp,
+//         u.id AS owner_id,
+//         u.nama AS owner_nama,
+//         u.username AS owner_username
+//     FROM tb_outlet o
+//     LEFT JOIN tb_user u ON o.id = u.id_outlet AND u.role = 'owner'
+// ");
+
+$outlet = query("SELECT outlet.*, user.nama AS owner_nama, user.username AS owner_username FROM tb_outlet outlet LEFT JOIN tb_user user ON outlet.id = user.id_outlet AND user.role = 'owner'");
 
 // var_dump($outlet);
 // die();
@@ -190,15 +192,15 @@ $outlet = query("
                                         <?php foreach ($outlet as $row) : ?>
                                             <tr>
                                                 <td><?= $i; ?></td>
-                                                <td><?= $row['outlet_nama']; ?></td>
-                                                <td><?= $row['owner_nama'] ? $row['owner_nama'] : '-'; ?></td>
-                                                <td><?= $row['outlet_tlp']; ?></td>
-                                                <td><?= $row['outlet_alamat']; ?></td>
+                                                <td><?= $row['nama']; ?></td>
+                                                <td><?= $row['owner_nama'] ? $row['owner_nama'] : 'Belum ada owner'; ?></td>
+                                                <td><?= $row['tlp']; ?></td>
+                                                <td><?= $row['alamat']; ?></td>
                                                 <td align="center">
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <a href="outlet_edit.php?id=<?= $row['outlet_id']; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                                                        <a href="outlet_edit.php?id=<?= $row['id']; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
                                                         <a href="#" data-toggle="tooltip" data-placement="bottom" title="Detail" class="btn btn-warning"><i class="fa fa-eye"></i></a>
-                                                        <a href="outlet_hapus.php?id=<?= $row['outlet_id']; ?>" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                                        <a href="outlet_hapus.php?id=<?= $row['id']; ?>" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
