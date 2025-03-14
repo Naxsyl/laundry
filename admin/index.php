@@ -1,13 +1,11 @@
 <?php
-
-$title = "Dashboard";
-// require_once 'function.php';
-// $jTransaksi = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_transaksi");
-// $jPelanggan = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_pelanggan");
-// $outlet = ambilsatubaris($conn, "SELECT COUNT(id) AS jumlah FROM tb_outlet");
-
-// $query = "SELECT tb_transaksi.*, member.nama_member, detail_transaksi. "
-
+$title = 'dashboard';
+require 'functions.php';
+$jTransaksi = ambilsatubaris($conn, 'SELECT COUNT(id_transaksi) as jumlahtransaksi FROM transaksi');
+$jPelanggan = ambilsatubaris($conn, 'SELECT COUNT(id_member) as jumlahmember FROM member');
+$joutlet = ambilsatubaris($conn, 'SELECT COUNT(id_outlet) as jumlahoutlet FROM outlet');
+$query = "SELECT transaksi.*,member.nama_member , detail_transaksi.total_harga FROM transaksi INNER JOIN member ON member.id_member = transaksi.member_id INNER JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi   ORDER BY transaksi.id_transaksi DESC LIMIT 10";
+$data = ambildata($conn, $query);
 ?>
 
 <!DOCTYPE html>
@@ -163,7 +161,7 @@ $title = "Dashboard";
                                 <li>
                                     <div id="sparklinedash"></div>
                                 </li>
-                                <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">2</span></li>
+                                <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success"><?= htmlspecialchars($joutlet['jumlahoutlet']); ?></span></li>
                             </ul>
                         </div>
                     </div>
@@ -174,7 +172,7 @@ $title = "Dashboard";
                                 <li>
                                     <div id="sparklinedash2"></div>
                                 </li>
-                                <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">1</span></li>
+                                <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple"><?= htmlspecialchars($jPelanggan['jumlahmember']); ?></span></li>
                             </ul>
                         </div>
                     </div>
@@ -185,7 +183,7 @@ $title = "Dashboard";
                                 <li>
                                     <div id="sparklinedash3"></div>
                                 </li>
-                                <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">2</span></li>
+                                <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info"><?= htmlspecialchars($jTransaksi['jumlahtransaksi']); ?></span></li>
                             </ul>
                         </div>
                     </div>
@@ -208,40 +206,20 @@ $title = "Dashboard";
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1 </td>
-                                            <td>DRY202311064642</td>
-                                            <td>zacky</td>
-                                            <td>baru</td>
-                                            <td>belum</td>
-                                            <td>75000</td>
-                                            <td align="center">
-                                                <a href="transaksi_detail.php?id=37" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2 </td>
-                                            <td>DRY202309250927</td>
-                                            <td>Kailendra</td>
-                                            <td>baru</td>
-                                            <td>dibayar</td>
-                                            <td>45000</td>
-                                            <td align="center">
-                                                <a href="transaksi_detail.php?id=35" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3 </td>
-                                            <td>DRY202309254854</td>
-                                            <td>Kailendra</td>
-                                            <td>diambil</td>
-                                            <td>dibayar</td>
-                                            <td>30000</td>
-                                            <td align="center">
-                                                <a href="transaksi_detail.php?id=34" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                            </td>
-                                        </tr>
-
+                                        <?php $no = 1;
+                                        foreach ($data as $transaksi): ?>
+                                            <tr>
+                                                <td><?= $no++ ?></td>
+                                                <td><?= htmlspecialchars($transaksi['kode_invoice']); ?></td>
+                                                <td><?= htmlspecialchars($transaksi['nama_member']); ?></td>
+                                                <td><?= htmlspecialchars($transaksi['status']); ?></td>
+                                                <td><?= htmlspecialchars($transaksi['status_bayar']); ?></td>
+                                                <td><?= htmlspecialchars($transaksi['total_harga']); ?></td>
+                                                <td align="center">
+                                                    <a href="transaksi_detail.php?id=<?= htmlspecialchars($transaksi['id_transaksi']); ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>

@@ -1,28 +1,34 @@
 <?php
+$title = 'pengguna';
+require 'functions.php';
 
-require_once '../function.php';
+$role = ['admin', 'owner', 'kasir'];
 
-$id = $_GET["id"];
-$user = query("SELECT * FROM tb_user WHERE id = $id")[0];
-// var_dump($user); 
-// die();
+$id_user = $_GET['id'];
+$queryedit = "SELECT * FROM user WHERE id_user = '$id_user'";
+$edit = ambilsatubaris($conn, $queryedit);
 
-if (isset($_POST["btn-simpan"])) {
-
-    // cek apakah data berhasil di update atau tidak 
-    if (ubah_user($_POST) > 0) {
-        echo "
-            <script>
-                alert('Data Berhasil diupdate!');
-                document.location.href = 'pengguna.php';
-            </script>
-            ";
+if (isset($_POST['btn-simpan'])) {
+    $nama     = $_POST['nama_user'];
+    $username = $_POST['username'];
+    $role     = $_POST['role'];
+    if ($_POST['password'] != null || $_POST['password'] == '') {
+        $pass     = md5($_POST['password']);
+        $query = "UPDATE user SET nama_user = '$nama' , username = '$username' , role = '$role' , password ='$pass' WHERE id_user = '$id_user'";
     } else {
-        echo "
-            <script>
-                alert('Data Gagal diupdate!');
-                document.location.href = 'pengguna.php';
-            </script>";
+        $query = "UPDATE user SET nama_user = '$nama' , username = '$username' , role = '$role' WHERE id_user = '$id_user'";
+    }
+
+
+    $execute = bisa($conn, $query);
+    if ($execute == 1) {
+        $success = 'true';
+        $title = 'Berhasil';
+        $message = 'Berhasil mengubah ' . $role;
+        $type = 'success';
+        header('location: pengguna.php?crud=' . $success . '&msg=' . $message . '&type=' . $type . '&title=' . $title);
+    } else {
+        echo "Gagal Tambah Data";
     }
 }
 ?>
@@ -181,25 +187,27 @@ if (isset($_POST["btn-simpan"])) {
                     <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                         <div class="white-box">
                             <form method="post" action="">
-                                <input type="hidden" name="id_user" value="<?= $user["id"]; ?>">
                                 <div class="form-group">
                                     <label>Nama Pengguna</label>
-                                    <input type="text" name="nama_user" class="form-control" value="<?= $user["nama"]; ?>">
+                                    <input type="text" name="nama_user" class="form-control" value="<?= $edit["nama_user"]; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label>Username</label>
-                                    <input type="text" name="username" class="form-control" value="<?= $user["username"]; ?>">
+                                    <input type="text" name="username" class="form-control" value="<?= $edit["username"]; ?>">
                                     <div class="form-group">
                                         <label>Password</label>
-                                        <input type="text" name="password" class="form-control">
+                                        <input type="password" name="password" class="form-control">
                                         <small class="text-danger">Kosongkan saja jika tidak akan mengubah password</small>
                                     </div>
                                     <div class="form-group">
                                         <label>Role</label>
                                         <select name="role" class="form-control">
-                                            <option value="admin" <?= ($user["role"] == "admin") ? "selected" : ""; ?>>Admin</option>
-                                            <option value="owner" <?= ($user["role"] == "owner") ? "selected" : ""; ?>>Owner</option>
-                                            <option value="kasir" <?= ($user["role"] == "kasir") ? "selected" : ""; ?>>Kasir</option>
+                                            <?php foreach ($role as $key): ?>
+                                                <?php if ($key == $edit['role']): ?>
+                                                    <option value="<?= $key ?>" selected><?= $key ?></option>
+                                                <?php endif ?>
+                                                <option value="<?= $key ?>"><?= ucfirst($key) ?></option>
+                                            <?php endforeach ?>
                                         </select>
                                     </div>
                                     <div class="text-right">

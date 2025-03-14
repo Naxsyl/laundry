@@ -1,34 +1,34 @@
 <?php
+$title = 'paket';
+require'functions.php';
+$jenis = ['kiloan','selimut','bedcover','kaos','lain'];
+$id_paket = stripslashes($_GET['id']);
+$queryedit = "SELECT * FROM paket WHERE id_paket = '$id_paket'";
+$edit = ambilsatubaris($conn,$queryedit);
+var_dump($edit);
+$query = 'SELECT * FROM outlet';
+$data = ambildata($conn,$query);
 
-require_once '../function.php';
+if(isset($_POST['btn-simpan'])){
+    $nama   = stripslashes($_POST['nama_paket']);
+    $jenis_paket = stripslashes($_POST['jenis_paket']);
+    $harga   = stripslashes($_POST['harga']);
+    $outlet_id   = stripslashes($_POST['outlet_id']);
 
-$id = $_GET["id"];
-$paket = query("SELECT * FROM tb_paket WHERE id = $id")[0];
-$outlet = query("SELECT id, nama FROM tb_outlet");
-// var_dump($paket);
-// die();
-
-if (isset($_POST["btn-simpan"])) {
-
-    // cek apakah data berhasil di tambahkan atau tidak 
-    if (ubah_paket($_POST) > 0) {
-        echo "
-            <script>
-                alert('Data Berhasil diupdate!');
-                document.location.href = 'paket.php';
-            </script>
-            ";
-    } else {
-        echo "
-            <script>
-                alert('Data Gagal diupdate!');
-                document.location.href = 'paket.php';
-            </script>";
+    $query = "UPDATE paket SET nama_paket='$nama',jenis_paket='$jenis_paket',harga='$harga',outlet_id='$outlet_id' WHERE id_paket = '$id_paket'";
+    
+    $execute = bisa($conn,$query);
+    if($execute == 1){
+        $success = 'true';
+        $title = 'Berhasil';
+        $message = 'Berhasil Ubah Data';
+        $type = 'success';
+        header('location: paket.php?crud='.$success.'&msg='.$message.'&type='.$type.'&title='.$title);
+    }else{
+        echo "Gagal Tambah Data";
     }
 }
-
-?>
-
+?> 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +58,7 @@ if (isset($_POST["btn-simpan"])) {
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -71,7 +71,7 @@ if (isset($_POST["btn-simpan"])) {
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
-    <!-- ============================================================== -->
+        <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
     <div id="wrapper">
@@ -90,7 +90,7 @@ if (isset($_POST["btn-simpan"])) {
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span>
+                        </span> 
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -140,100 +140,90 @@ if (isset($_POST["btn-simpan"])) {
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                </div>
+                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                 </div>
             </div>
-
+            
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
+               <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Master paket</h4>
-                    </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="outlet.php">paket</a></li>
-                            <li><a href="#">Tambah paket</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+        <div id="page-wrapper"> 
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Data Master <?= htmlspecialchars($title); ?></h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="outlet.php"><?= htmlspecialchars($title); ?></a></li>
+                <li><a href="#">Tambah <?= htmlspecialchars($title); ?></a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                          <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <form method="post" action="">
-                                <input type="hidden" name="id_paket" value="<?= $paket["id"]; ?>">
-                                <div class="form-group">
-                                    <label>Nama Paket</label>
-                                    <input type="text" name="nama_paket" class="form-control" value="<?= $paket["nama_paket"]; ?>">
-                                </div>
-                                <div class="form-group">
-                                    <label>Jenis Paket</label>
-                                    <select name="jenis_paket" class="form-control">
-
-                                        <option value="<?= $paket["jenis"]; ?>" selected>kiloan</option>
-
-                                        <option value="kiloan">kiloan</option>
-
-                                        <option value="kiloan">kiloan</option>
-
-                                        <option value="selimut">selimut</option>
-
-                                        <option value="bedcover">bedcover</option>
-
-                                        <option value="kaos">kaos</option>
-
-                                        <option value="lain">lain</option>
-
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Harga</label>
-                                    <input type="text" name="harga" class="form-control" value="<?= $paket["harga"]; ?>">
-                                </div>
-                                <div class="form-group">
-                                    <label>Pilih Outlet</label>
-                                    <select name="outlet_id" class="form-control">
-                                        <?php foreach ($outlet as $row) : ?>
-                                            <option value="<?= $row['id']; ?>" <?= $paket['id_outlet'] == $row['id'] ? 'selected' : ''; ?>>
-                                                <?= $row['nama']; ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="text-right">
-                                    <button type="reset" class="btn btn-danger">Reset</button>
-                                    <button type="submit" name="btn-simpan" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="col-md-6 text-right">
+                        <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
                     </div>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
+                <form method="post" action="">
+                <div class="form-group">
+                    <label>Nama Paket</label>
+                    <input type="text" name="nama_paket" class="form-control" value="<?= htmlspecialchars($edit['nama_paket']); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Jenis Paket</label>
+                    <select name="jenis_paket" class="form-control">
+                        <?php foreach ($jenis as $key): ?>
+                            <?php if ($key == $edit['jenis_paket']): ?>
+                            <option value="<?= htmlspecialchars($key); ?>" selected><?= htmlspecialchars($key); ?></option> 
+                        <?php endif ?> 
+                            <option value="<?= htmlspecialchars($key); ?>"><?= htmlspecialchars($key); ?></option>                    
+                       <?php endforeach ?>                                                        
+                                            </select>
+                </div>
+                <div class="form-group">
+                    <label>Harga</label>
+                    <input type="text" name="harga" class="form-control" value="<?= htmlspecialchars($edit['harga']); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Pilih Outlet</label>
+                    <select name="outlet_id" class="form-control">
+                         <?php foreach ($data as $outlet): ?>
+                            <?php if ($data['id_outlet'] == $edit['outlet_id']): ?>
+                            <option value="<?= htmlspecialchars($outlet['id_outlet']); ?>" selected><?= htmlspecialchars($outlet['nama_outlet']); ?></option> 
+                        <?php endif ?> 
+                            <option value="<?= htmlspecialchars($outlet['id_outlet']); ?>"><?= htmlspecialchars($outlet['nama_outlet']); ?></option>                    
+                       <?php endforeach ?> 
+                                            </select>
+                </div>
+
+                <div class="text-right">
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                    <button type="submit" name="btn-simpan" class="btn btn-primary">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -268,65 +258,62 @@ if (isset($_POST["btn-simpan"])) {
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click', () => {
+        $('#btn_hapus').on('click',() => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready(function() {
+        $(document).ready( function () {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [{
+                "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }],
-                "order": [
-                    [1, 'asc']
-                ],
-                "language": {
-                    "sProcessing": "Sedang memproses ...",
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord": "Maaf data tidak tersedia",
-                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total data)",
-                    "sSearch": "Cari",
-                    "oPaginate": {
-                        "sFirst": "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext": "Selanjutnya",
-                        "sLast": "Terakhir"
+                } ],
+                "order": [[ 1, 'asc' ]],
+                "language" : {
+                    "sProcessing" : "Sedang memproses ...",
+                    "lengthMenu" : "Tampilkan _MENU_ data per halaman",
+                    "zeroRecord" : "Maaf data tidak tersedia",
+                    "info" : "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
+                    "infoEmpty" : "Tidak ada data yang tersedia",
+                    "infoFiltered" : "(difilter dari _MAX_ total data)",
+                    "sSearch" : "Cari",
+                    "oPaginate" : {
+                        "sFirst" : "Pertama",
+                        "sPrevious" : "Sebelumnya",
+                        "sNext" : "Selanjutnya",
+                        "sLast" : "Terakhir"
                     }
                 }
             });
-            t.on('order.dt search.dt', function() {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
 
-
-        });
-        $('#btn-refresh').on('click', () => {
+            
+        } );
+        $('#btn-refresh').on('click',() => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if (index == -1) {
+            if(index == -1){
                 window.location = window.location.href;
-
+                
             }
-            if (index != -1) {
-                window.location = oldURL.substring(0, index)
+            if(index != -1){
+                window.location = oldURL.substring(0,index)
             }
-
+            
         });
+
     </script>
 
     <br />
 </body>
 
 </html>
+ 

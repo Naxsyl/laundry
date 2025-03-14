@@ -1,3 +1,16 @@
+<?php
+$title = 'laporan';
+require 'functions.php';
+$bulan = ambilsatubaris($conn,"SELECT SUM(total_harga) AS total FROM detail_transaksi INNER JOIN transaksi ON transaksi.id_transaksi = detail_transaksi.transaksi_id WHERE status_bayar = 'dibayar' AND MONTH(tgl_pembayaran) = MONTH(NOW())");
+$tahun = ambilsatubaris($conn,"SELECT SUM(total_harga) AS total FROM detail_transaksi INNER JOIN transaksi ON transaksi.id_transaksi = detail_transaksi.transaksi_id WHERE status_bayar = 'dibayar' AND YEAR(tgl_pembayaran) = YEAR(NOW())");
+$minggu = ambilsatubaris($conn,"SELECT SUM(total_harga) AS total FROM detail_transaksi INNER JOIN transaksi ON transaksi.id_transaksi = detail_transaksi.transaksi_id WHERE status_bayar = 'dibayar' AND WEEK(tgl_pembayaran) = WEEK(NOW())");
+
+
+$penjualan = ambildata($conn,"SELECT SUM(detail_transaksi.total_harga) AS total,COUNT(detail_transaksi.paket_id) as jumlah_paket,paket.nama_paket,transaksi.tgl_pembayaran FROM detail_transaksi
+INNER JOIN transaksi ON transaksi.id_transaksi = detail_transaksi.transaksi_id
+INNER JOIN paket ON paket.id_paket = detail_transaksi.paket_id
+WHERE transaksi.status_bayar = 'dibayar' GROUP BY detail_transaksi.paket_id");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +40,7 @@
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -40,7 +53,7 @@
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
-    <!-- ============================================================== -->
+        <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
     <div id="wrapper">
@@ -59,7 +72,7 @@
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span>
+                        </span> 
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -109,110 +122,102 @@
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                </div>
+                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                 </div>
             </div>
-
+            
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
+               <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Dashboard</h4>
-                    </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="#">Dashboard</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
-                <!-- /.row -->
-                <!-- ============================================================== -->
-                <!-- Different data widgets -->
-                <!-- ============================================================== -->
-                <!-- .row -->
-                <div class="row">
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Penghasilan Tahun Ini</h3>
-                            <ul class="list-inline two-part">
-                                <li>
-                                    <div id="sparklinedash"></div>
-                                </li>
-                                <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">336000</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Penghasilan Bulan ini</h3>
-                            <ul class="list-inline two-part">
-                                <li>
-                                    <div id="sparklinedash2"></div>
-                                </li>
-                                <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">600</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Penghasilan Minggu Ini</h3>
-                            <ul class="list-inline two-part">
-                                <li>
-                                    <div id="sparklinedash3"></div>
-                                </li>
-                                <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">56000</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12">
-                        <div class="white-box">
-                            <h3 class="box-title">Laporan Penjualan Paket</h3>
-                            <div class="table-responsive">
-                                <table class="table" id="table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nama Paket</th>
-                                            <th>Jumlah Transaksi</th>
-                                            <th>Tanggal Transaksi</th>
-                                            <th>Total Hasil</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Paket Hemat</td>
-                                            <td>1</td>
-                                            <td>2025-01-22 07:01:58</td>
-                                            <td>56000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Paket Kilat</td>
-                                            <td>3</td>
-                                            <td>2025-01-11 01:42:34</td>
-                                            <td>280000</td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+        <div id="page-wrapper"><div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Dashboard</h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Dashboard</a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <!-- ============================================================== -->
+    <!-- Different data widgets -->
+    <!-- ============================================================== -->
+    <!-- .row -->
+    <div class="row">
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Penghasilan Tahun Ini</h3>
+                <ul class="list-inline two-part">
+                    <li>
+                        <div id="sparklinedash"></div>
+                    </li>
+                    <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success"><?= htmlspecialchars($tahun['total']); ?></span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Penghasilan Bulan ini</h3>
+                <ul class="list-inline two-part">
+                    <li>
+                        <div id="sparklinedash2"></div>
+                    </li>
+                    <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple"><?= htmlspecialchars($bulan['total']); ?></span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Penghasilan Minggu Ini</h3>
+                <ul class="list-inline two-part">
+                    <li>
+                        <div id="sparklinedash3"></div>
+                    </li>
+                    <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info"><?= htmlspecialchars($minggu['total']); ?></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Laporan Penjualan Paket</h3>
+                <div class="table-responsive">
+                    <table class="table" id="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Paket</th>
+                                <th>Jumlah Transaksi</th>
+                                <th>Tanggal Transaksi</th>
+                                <th>Total Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no=1; foreach($penjualan as $transaksi): ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td><?= htmlspecialchars($transaksi['nama_paket']); ?></td>
+                                    <td><?= htmlspecialchars($transaksi['jumlah_paket']); ?></td>
+                                    <td><?= htmlspecialchars($transaksi['tgl_pembayaran']); ?></td>
+                                    <td><?= htmlspecialchars($transaksi['total']); ?></td>                                    
+                                </tr>
+                            <?php endforeach; ?> 
+                                                    </tbody>
+                    </table>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -247,64 +252,61 @@
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click', () => {
+        $('#btn_hapus').on('click',() => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready(function() {
+        $(document).ready( function () {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [{
+                "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }],
-                "order": [
-                    [1, 'asc']
-                ],
-                "language": {
-                    "sProcessing": "Sedang memproses ...",
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord": "Maaf data tidak tersedia",
-                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total data)",
-                    "sSearch": "Cari",
-                    "oPaginate": {
-                        "sFirst": "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext": "Selanjutnya",
-                        "sLast": "Terakhir"
+                } ],
+                "order": [[ 1, 'asc' ]],
+                "language" : {
+                    "sProcessing" : "Sedang memproses ...",
+                    "lengthMenu" : "Tampilkan _MENU_ data per halaman",
+                    "zeroRecord" : "Maaf data tidak tersedia",
+                    "info" : "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
+                    "infoEmpty" : "Tidak ada data yang tersedia",
+                    "infoFiltered" : "(difilter dari _MAX_ total data)",
+                    "sSearch" : "Cari",
+                    "oPaginate" : {
+                        "sFirst" : "Pertama",
+                        "sPrevious" : "Sebelumnya",
+                        "sNext" : "Selanjutnya",
+                        "sLast" : "Terakhir"
                     }
                 }
             });
-            t.on('order.dt search.dt', function() {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
 
-
-        });
-        $('#btn-refresh').on('click', () => {
+            
+        } );
+        $('#btn-refresh').on('click',() => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if (index == -1) {
+            if(index == -1){
                 window.location = window.location.href;
-
+                
             }
-            if (index != -1) {
-                window.location = oldURL.substring(0, index)
+            if(index != -1){
+                window.location = oldURL.substring(0,index)
             }
-
+            
         });
+
     </script>
 
-</body>
+    </body>
 
 </html>
+ 

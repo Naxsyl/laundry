@@ -1,24 +1,24 @@
 <?php
-// require 'functions.php';
-// $status = ['baru', 'proses', 'selesai', 'diambil'];
-// $query = "SELECT transaksi.*,member.nama_member , detail_transaksi.*,outlet.nama_outlet,paket.nama_paket FROM transaksi 
-// INNER JOIN member ON member.id_member = transaksi.member_id 
-// INNER JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi 
-// INNER JOIN outlet ON outlet.id_outlet = transaksi.outlet_id 
-// INNER JOIN paket ON paket.outlet_id = transaksi.outlet_id WHERE transaksi.id_transaksi=" . $_GET['id'];
-// $data = ambildata($conn, $query);
+require 'functions.php';
+$status = ['baru','proses','selesai','diambil'];
+$query = "SELECT transaksi.*,member.nama_member , detail_transaksi.*,outlet.nama_outlet,paket.nama_paket FROM transaksi 
+INNER JOIN member ON member.id_member = transaksi.member_id 
+INNER JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi 
+INNER JOIN outlet ON outlet.id_outlet = transaksi.outlet_id 
+INNER JOIN paket ON paket.outlet_id = transaksi.outlet_id WHERE transaksi.id_transaksi=".$_GET['id'];
+$data = ambildata($conn,$query);
 
-if (isset($_POST['btn-simpan'])) {
+if(isset($_POST['btn-simpan'])){
     $status = $_POST['status'];
     $query = "UPDATE transaksi SET status = '$status' WHERE id_transaksi =" . $_GET['id'];
-    $execute = bisa($conn, $query);
-    if ($execut == 1) {
+    $execute = bisa($conn,$query);
+    if($execut == 1){
         $succes = 'true';
         $title = 'Berhasil';
         $message = 'Berhasil mengubah status transaksi';
         $type = 'success';
-        header('location: transaksi.php?crud=' . $success . '&msg=' . $message . '&type=' . $type . '&title=' . $title);
-    } else {
+        header('location: transaksi.php?crud=' .$success.'&msg='. $message .'&type='. $type .'&title='. $title );
+    }else{
         echo "Gagal Tambah Data";
     }
 }
@@ -53,7 +53,7 @@ if (isset($_POST['btn-simpan'])) {
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -86,7 +86,7 @@ if (isset($_POST['btn-simpan'])) {
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span>
+                        </span> 
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -148,99 +148,98 @@ if (isset($_POST['btn-simpan'])) {
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                </div>
+                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                 </div>
             </div>
-
+            
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
+               <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Master Transaksi</h4>
-                    </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="outlet.php">Transaksi</a></li>
-                            <li><a href="#">Tambah Transaksi</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+        <div id="page-wrapper"> 
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Data Master Transaksi</h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="outlet.php">Transaksi</a></li>
+                <li><a href="#">Tambah Transaksi</a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <form method="post" action="">
-                                <div class="form-group">
-                                    <label>Kode Invoice</label>
-                                    <input type="text" name="kode_invoice" class="form-control" readonly="" value="DRY202309250927">
-                                </div>
-                                <div class="form-group">
-                                    <label>Outlet</label>
-                                    <input type="text" name="username" class="form-control" readonly="" value="Londre Cab. Palapa Pasar Minggu">
-                                </div>
-                                <div class="form-group">
-                                    <label>Pelanggan</label>
-                                    <input type="text" name="password" class="form-control" readonly="" value="Kailendra Abidzarabbani">
-                                </div>
-                                <div class="form-group">
-                                    <label>Jenis Paket</label>
-                                    <input type="text" name="password" class="form-control" readonly="" value="Paket Hemat Kilat">
-                                </div>
-                                <div class="form-group">
-                                    <label>Jumlah</label>
-                                    <input readonly="" type="text" name="qty" class="form-control" value="3">
-                                </div>
-                                <div class="form-group">
-                                    <label>Total Harga</label>
-                                    <input readonly="" type="text" name="biaya_tambahan" class="form-control" value="45000">
-                                </div>
-                                <div class="form-group">
-                                    <label>Total Bayar</label>
-                                    <input readonly="" type="text" name="biaya_tambahan" class="form-control" value="100000">
-                                </div>
-                                <div class="form-group">
-                                    <label>Di Bayar Pada Tanggal </label>
-                                    <input readonly="" type="text" name="biaya_tambahan" class="form-control" value="2023-09-25 05:27:58">
-                                </div>
-                                <div class="form-group">
-                                    <label>Status Transaksi</label>
-                                    <select name="status" class="form-control">
-                                        <option value="baru">baru</option>
-                                        <option value="proses" selected>proses</option>
-                                        <option value="proses">proses</option>
-                                        <option value="selesai">selesai</option>
-                                        <option value="diambil">diambil</option>
-                                    </select>
-                                    <small>Klik Tombol Ubah Untuk Menyimpan Perubahan Transaksi</small>
-                                </div>
-                                <div class="text-right">
-                                    <button type="submit" name="btn-simpan" class="btn btn-primary">Ubah</button>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="col-md-6">
+                          <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
                     </div>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
+                <form method="post" action="">
+                <div class="form-group">
+                    <label>Kode Invoice</label>
+                    <input type="text" name="kode_invoice" class="form-control" readonly="" value="DRY202309250927">
+                </div>
+                <div class="form-group">
+                    <label>Outlet</label>
+                    <input type="text" name="username" class="form-control" readonly="" value="Londre Cab. Palapa Pasar Minggu">
+                </div>
+                <div class="form-group">
+                    <label>Pelanggan</label>
+                    <input type="text" name="password" class="form-control" readonly="" value="Kailendra Abidzarabbani"> 
+                </div>
+                <div class="form-group">
+                    <label>Jenis Paket</label>
+                    <input type="text" name="password" class="form-control" readonly="" value="Paket Hemat Kilat"> 
+                </div>
+                <div class="form-group">
+                    <label>Jumlah</label>
+                    <input readonly=""   type="text" name="qty" class="form-control" value="3"> 
+                </div>
+                <div class="form-group">
+                    <label>Total Harga</label>
+                    <input readonly=""   type="text" name="biaya_tambahan" class="form-control" value="45000"> 
+                </div>
+                                    <div class="form-group">
+                        <label>Total Bayar</label>
+                        <input readonly=""   type="text" name="biaya_tambahan" class="form-control" value="100000"> 
+                    </div>
+                    <div class="form-group">
+                        <label>Di Bayar Pada Tanggal </label>
+                        <input readonly=""   type="text" name="biaya_tambahan" class="form-control" value="2023-09-25 05:27:58"> 
+                    </div>
+                                    <div class="form-group">
+                        <label>Status Transaksi</label>
+                        <select name="status" class="form-control">
+                                                                                    <option value="baru">baru</option>
+                                                                                    <option value="proses" selected>proses</option>
+                                                        <option value="proses">proses</option>
+                                                                                    <option value="selesai">selesai</option>
+                                                                                    <option value="diambil">diambil</option>
+                                                    </select>
+                        <small>Klik Tombol Ubah Untuk Menyimpan Perubahan Transaksi</small>
+                    </div>
+                <div class="text-right">
+                    <button type="submit" name="btn-simpan" class="btn btn-primary">Ubah</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -275,65 +274,62 @@ if (isset($_POST['btn-simpan'])) {
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click', () => {
+        $('#btn_hapus').on('click',() => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready(function() {
+        $(document).ready( function () {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [{
+                "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }],
-                "order": [
-                    [1, 'asc']
-                ],
-                "language": {
-                    "sProcessing": "Sedang memproses ...",
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord": "Maaf data tidak tersedia",
-                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total data)",
-                    "sSearch": "Cari",
-                    "oPaginate": {
-                        "sFirst": "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext": "Selanjutnya",
-                        "sLast": "Terakhir"
+                } ],
+                "order": [[ 1, 'asc' ]],
+                "language" : {
+                    "sProcessing" : "Sedang memproses ...",
+                    "lengthMenu" : "Tampilkan _MENU_ data per halaman",
+                    "zeroRecord" : "Maaf data tidak tersedia",
+                    "info" : "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
+                    "infoEmpty" : "Tidak ada data yang tersedia",
+                    "infoFiltered" : "(difilter dari _MAX_ total data)",
+                    "sSearch" : "Cari",
+                    "oPaginate" : {
+                        "sFirst" : "Pertama",
+                        "sPrevious" : "Sebelumnya",
+                        "sNext" : "Selanjutnya",
+                        "sLast" : "Terakhir"
                     }
                 }
             });
-            t.on('order.dt search.dt', function() {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
 
-
-        });
-        $('#btn-refresh').on('click', () => {
+            
+        } );
+        $('#btn-refresh').on('click',() => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if (index == -1) {
+            if(index == -1){
                 window.location = window.location.href;
-
+                
             }
-            if (index != -1) {
-                window.location = oldURL.substring(0, index)
+            if(index != -1){
+                window.location = oldURL.substring(0,index)
             }
-
+            
         });
+
     </script>
 
     <br />
 </body>
 
 </html>
+ 

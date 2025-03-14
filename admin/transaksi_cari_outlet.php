@@ -1,14 +1,3 @@
-<?php
-
-require_once '../function.php';
-
-$id = $_GET["id"];
-$outlets = query("SELECT * FROM tb_outlet");
-
-
-
-?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +28,7 @@ $outlets = query("SELECT * FROM tb_outlet");
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -52,7 +41,7 @@ $outlets = query("SELECT * FROM tb_outlet");
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
-    <!-- ============================================================== -->
+        <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
     <div id="wrapper">
@@ -71,7 +60,7 @@ $outlets = query("SELECT * FROM tb_outlet");
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span>
+                        </span> 
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -121,84 +110,89 @@ $outlets = query("SELECT * FROM tb_outlet");
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                </div>
+                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                 </div>
             </div>
-
+            
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
+               <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Pilih Outlet</h4>
-                    </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="#">Transaksi</a></li>
-                            <li><a href="#">Pilih Outlet</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+        <div id="page-wrapper"> 
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Pilih Outlet</h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Transaksi</a></li>
+                <li><a href="#">Pilih Outlet</a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <a href="javascript:void(0)" onclick="window.history.back()" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    <small>Jika pelanggan belum terdaftar maka daftarkan dulu lewat menu pelanggan</small>
-                                    <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-bordered thead-dark" id="table">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th width="5%">#</th>
-                                            <th>Nama</th>
-                                            <th>Alamat</th>
-                                            <th>Telepon</th>
-                                            <th width="15%">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $i = 1; ?>
-                                        <?php foreach ($outlets as $outlet) : ?>
-                                            <tr>
-                                                <td><?= $i; ?></td>
-                                                <td><?= $outlet['nama']; ?></td>
-                                                <td><?= $outlet['alamat']; ?></td>
-                                                <td><?= $outlet['tlp']; ?></td>
-                                                <td align="center">
-                                                    <a href="transaksi_tambah.php?id=<?= $id; ?>&outlet_id=<?= $outlet['id']; ?>"
-                                                        data-toggle="tooltip" data-placement="bottom" title="Pilih" class="btn btn-primary btn-block">PILIH</a>
-                                                </td>
-                                            </tr>
-                                            <?php $i++; ?>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                        <a href="javascript:void(0)" onclick="window.history.back()" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <small>Jika pelanggan belum terdaftar maka daftarkan dulu lewat menu pelanggan</small>
+                        <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
                     </div>
                 </div>
-                <!-- ============================================================== -->
-                <!-- table -->
-                <!-- ============================================================== -->
-                <div class="row">
-
+                <div class="table-responsive">
+                    <table class="table table-bordered thead-dark" id="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th width="5%">#</th>
+                                <th>Nama</th>
+                                <th>Alamat</th>
+                                <th>Telepon</th>
+                                <th width="15%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                                              <tr>
+                                    <td></td>
+                                    <td>Londre Cab. Pasar Minggu</td>
+                                    <td>Jalan Palapa No. 2</td>
+                                    <td>081287446805</td>
+                                    <td align="center">
+                                          <a href="transaksi_tambah.php?id=5&outlet_id=26" 
+                                      data-toggle="tooltip" data-placement="bottom" title="Pilih" class="btn btn-primary btn-block">PILIH</a>
+                                    </td>
+                                </tr>
+                                                            <tr>
+                                    <td></td>
+                                    <td>Londre Cab. Mampang Prapatan</td>
+                                    <td>Jl. Mampang Prapatan 1</td>
+                                    <td>02179432874</td>
+                                    <td align="center">
+                                          <a href="transaksi_tambah.php?id=5&outlet_id=27" 
+                                      data-toggle="tooltip" data-placement="bottom" title="Pilih" class="btn btn-primary btn-block">PILIH</a>
+                                    </td>
+                                </tr>
+                                                                                </tbody>
+                    </table>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- table -->
+    <!-- ============================================================== -->
+    <div class="row">
+        
+    </div>
+</div>
+<!-- /.container-fluid -->
+<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -233,62 +227,58 @@ $outlets = query("SELECT * FROM tb_outlet");
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click', () => {
+        $('#btn_hapus').on('click',() => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready(function() {
+        $(document).ready( function () {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [{
+                "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }],
-                "order": [
-                    [1, 'asc']
-                ],
-                "language": {
-                    "sProcessing": "Sedang memproses ...",
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord": "Maaf data tidak tersedia",
-                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total data)",
-                    "sSearch": "Cari",
-                    "oPaginate": {
-                        "sFirst": "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext": "Selanjutnya",
-                        "sLast": "Terakhir"
+                } ],
+                "order": [[ 1, 'asc' ]],
+                "language" : {
+                    "sProcessing" : "Sedang memproses ...",
+                    "lengthMenu" : "Tampilkan _MENU_ data per halaman",
+                    "zeroRecord" : "Maaf data tidak tersedia",
+                    "info" : "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
+                    "infoEmpty" : "Tidak ada data yang tersedia",
+                    "infoFiltered" : "(difilter dari _MAX_ total data)",
+                    "sSearch" : "Cari",
+                    "oPaginate" : {
+                        "sFirst" : "Pertama",
+                        "sPrevious" : "Sebelumnya",
+                        "sNext" : "Selanjutnya",
+                        "sLast" : "Terakhir"
                     }
                 }
             });
-            t.on('order.dt search.dt', function() {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
 
-
-        });
-        $('#btn-refresh').on('click', () => {
+            
+        } );
+        $('#btn-refresh').on('click',() => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if (index == -1) {
+            if(index == -1){
                 window.location = window.location.href;
-
+                
             }
-            if (index != -1) {
-                window.location = oldURL.substring(0, index)
+            if(index != -1){
+                window.location = oldURL.substring(0,index)
             }
-
+            
         });
+
     </script>
 
     <br />

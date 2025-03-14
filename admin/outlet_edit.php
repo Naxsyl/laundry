@@ -1,34 +1,41 @@
 <?php
-require_once '../function.php';
+$title = 'outlet';
+require 'functions.php';
+$query = 'SELECT outlet.*, user.nama_user,user.id_user FROM outlet LEFT JOIN user ON user.outlet_id = outlet.id_outlet WHERE id_outlet = ' . stripslashes($_GET['id']);
+$data = ambilsatubaris($conn,$query);
 
-$id = $_GET["id"];
-$outlet = query("SELECT * FROM tb_outlet WHERE id = $id")[0];
-$owner = query("SELECT id, nama FROM tb_user WHERE role = 'owner' AND id_outlet = $id")[0];
-$owners = query("SELECT id, nama FROM tb_user WHERE role = 'owner' AND id_outlet IS NULL");
-// var_dump($owners);
-// die();
+$query2 = 'SELECT user.*,outlet.nama_outlet FROM outlet RIGHT JOIN user ON user.outlet_id = outlet.id_outlet WHERE user.role = "owner" order by user.outlet_id asc';
+$data2 = ambildata($conn,$query2);
+if(isset($_POST['btn-simpan'])){
+    $nama   = stripslashes($_POST['nama_outlet']);
+    $alamat = stripslashes($_POST['alamat_outlet']);
+    $telp   = stripslashes($_POST['telp_outlet']);
 
-if (isset($_POST["btn-simpan"])) {
-    // die(var_dump($_POST));
+    $query = "UPDATE outlet SET nama_outlet = '$nama' , alamat_outlet = '$alamat' , telp_outlet='$telp' WHERE id_outlet = " . stripslashes($_GET['id']);
+    
+    
+    if($_POST['owner_id_new']){
+        $query2 = "UPDATE user SET outlet_id = '" . stripslashes($_GET['id']) . "' WHERE id_user = " . $_POST['owner_id_new'];
+        $query3 = "UPDATE user SET outlet_id = NULL WHERE id_user = " . stripslashes($data['id_user']);
+        $execute3 = bisa($conn,$query3);
+    }else{
+        $query2 = "UPDATE user SET outlet_id = '" . stripslashes($_GET['id']) . "' WHERE id_user = " . stripslashes($_POST['owner_id']);
+    }
 
-    // cek apakah data berhasil di tambahkan atau tidak 
-    if (ubah_outlet($_POST) > 0) {
-        echo "
-            <script>
-                alert('Data Berhasil diupdate!');
-                document.location.href = 'outlet.php';
-            </script>
-            ";
-    } else {
-        echo "
-            <script>
-                alert('Data Gagal diupdate!');
-                document.location.href = 'outlet.php';
-            </script>";
+    $execute = bisa($conn,$query);
+    $execute2 = bisa($conn,$query2);
+
+    if($execute == 1 && $execute2 == 1){
+        $success = 'true';
+        $title = 'Berhasil';
+        $message = 'Berhasil Mengubah Data';
+        $type = 'success';
+        header('location: outlet.php?crud='.$success.'&msg='.$message.'&type='.$type.'&title='.$title);
+    }else{
+        echo "Gagal Tambah Data";
     }
 }
-?>
-
+?> 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +65,7 @@ if (isset($_POST["btn-simpan"])) {
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -71,7 +78,7 @@ if (isset($_POST["btn-simpan"])) {
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
-    <!-- ============================================================== -->
+        <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
     <div id="wrapper">
@@ -90,7 +97,7 @@ if (isset($_POST["btn-simpan"])) {
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span>
+                        </span> 
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -140,83 +147,103 @@ if (isset($_POST["btn-simpan"])) {
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                </div>
+                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                 </div>
             </div>
-
+            
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
+               <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Master Outlet</h4>
-                    </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="outlet.php">Outlet</a></li>
-                            <li><a href="#">Tambah Outlet</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+        <div id="page-wrapper"> 
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Data Master Outlet</h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="outlet.php">Outlet</a></li>
+                <li><a href="#">Tambah Outlet</a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                          <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <form method="post" action="">
-                                <input type="hidden" name="id_outlet" value="<?= $outlet["id"]; ?>">
-                                <input type="hidden" name="id_owner" value="<?= $owner["id"]; ?>">
-                                <div class="form-group">
-                                    <label>Nama Outlet</label>
-                                    <input type="text" value="<?= $outlet['nama']; ?>" name="nama_outlet" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Alamat Outlet</label>
-                                    <textarea name="alamat_outlet" class="form-control"><?= $outlet['alamat']; ?></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label>Nomor Telepon</label>
-                                    <input type="text" value="<?= $outlet['tlp']; ?>" name="telp_outlet" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Owner Sekarang : <?= $owner ? $owner['nama'] : 'belum ada owner'; ?></label>
-                                    <select name="owner_id_new" class="form-control">
-                                        <option value="<?= $owner ? $owner['id'] : ''; ?>"><?= $owner ? $owner['nama'] : 'Pilih Owner'; ?></option>
-                                        <?php foreach ($owners as $row) : ?>
-                                            <option value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="text-right">
-                                    <button type="reset" class="btn btn-danger">Reset</button>
-                                    <button type="submit" name="btn-simpan" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="col-md-6 text-right">
+                        <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
                     </div>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
+                <form method="post" action="">
+                <div class="form-group">
+                    <label>Nama Outlet</label>
+                    <input type="text" value="<?= $data['nama_outlet']; ?>" name="nama_outlet" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Alamat Outlet</label>
+                    <textarea name="alamat_outlet" class="form-control"><?= htmlspecialchars($data['alamat_outlet']); ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Nomor Telepon</label>
+                    <input type="text" value="<?= htmlspecialchars($data['telp_outlet']); ?>" name="telp_outlet" class="form-control">
+                </div>
+                <?php if($data['nama_user']  == null): ?>
+                    <div class="form-group">
+                        <label>Belum Ada Owner (silahkan pilih owner)</label>
+                        <select name="owner_id" class="form-control">
+                            <?php foreach ($data2 as $owner): ?>
+                                <option value="<?= htmlspecialchars($owner['id_user']); ?>"><?= htmlspecialchars($owner['nama_user']); ?> 
+                                    <?php if ($owner['outlet_id'] == null): ?>
+                                        ( Belum memiliki outlet )
+                                    <?php else: ?>
+                                        ( Owner di <?= htmlspecialchars($owner['nama_outlet']); ?> )
+                                    <?php endif ?>                                    
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                <?php else: ?>
+                    <div class="form-group">
+                        <label>Owner Sekarang : <?= htmlspecialchars($data['nama_user']); ?></label>
+                        <select name="owner_id_new" class="form-control">
+                            <option class="">Pilih Untuk Mengganti owner</option>
+                            <?php foreach ($data2 as $owner): ?>
+                                <option value="<?= htmlspecialchars($owner['id_user']); ?>"><?= htmlspecialchars($owner['nama_user']); ?> 
+                                    <?php if ($owner['outlet_id'] == null): ?>
+                                        ( Belum memiliki outlet )
+                                    <?php else: ?>
+                                        ( Owner di <?= htmlspecialchars($owner['nama_outlet']); ?> )
+                                    <?php endif ?>                                    
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+                <div class="text-right">
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                    <button type="submit" name="btn-simpan" class="btn btn-primary">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -251,65 +278,62 @@ if (isset($_POST["btn-simpan"])) {
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click', () => {
+        $('#btn_hapus').on('click',() => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready(function() {
+        $(document).ready( function () {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [{
+                "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }],
-                "order": [
-                    [1, 'asc']
-                ],
-                "language": {
-                    "sProcessing": "Sedang memproses ...",
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord": "Maaf data tidak tersedia",
-                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total data)",
-                    "sSearch": "Cari",
-                    "oPaginate": {
-                        "sFirst": "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext": "Selanjutnya",
-                        "sLast": "Terakhir"
+                } ],
+                "order": [[ 1, 'asc' ]],
+                "language" : {
+                    "sProcessing" : "Sedang memproses ...",
+                    "lengthMenu" : "Tampilkan _MENU_ data per halaman",
+                    "zeroRecord" : "Maaf data tidak tersedia",
+                    "info" : "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
+                    "infoEmpty" : "Tidak ada data yang tersedia",
+                    "infoFiltered" : "(difilter dari _MAX_ total data)",
+                    "sSearch" : "Cari",
+                    "oPaginate" : {
+                        "sFirst" : "Pertama",
+                        "sPrevious" : "Sebelumnya",
+                        "sNext" : "Selanjutnya",
+                        "sLast" : "Terakhir"
                     }
                 }
             });
-            t.on('order.dt search.dt', function() {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
 
-
-        });
-        $('#btn-refresh').on('click', () => {
+            
+        } );
+        $('#btn-refresh').on('click',() => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if (index == -1) {
+            if(index == -1){
                 window.location = window.location.href;
-
+                
             }
-            if (index != -1) {
-                window.location = oldURL.substring(0, index)
+            if(index != -1){
+                window.location = oldURL.substring(0,index)
             }
-
+            
         });
+
     </script>
 
     <br />
 </body>
 
 </html>
+ 

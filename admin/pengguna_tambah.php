@@ -1,31 +1,29 @@
 <?php
-
-require_once '../function.php';
-
-$outlet = query("SELECT id, nama FROM tb_outlet");
-
-if (isset($_POST["btn-simpan"])) {
-
-    // cek apakah data berhasil di tambahkan atau tidak 
-    if (tambah_user($_POST) > 0) {
-        echo "
-            <script>
-                alert('Data Berhasil Ditambahkan!');
-                document.location.href = 'pengguna.php';
-            </script>
-            ";
+$title = 'pengguna';
+require 'functions.php';
+$outlet = ambildata($conn, 'SELECT * FROM outlet');
+if (isset($_POST['btn-simpan'])) {
+    $nama     = $_POST['nama_user'];
+    $username = $_POST['username'];
+    $pass     = md5($_POST['password']);
+    $role     = $_POST['role'];
+    if ($role == 'kasir') {
+        $outlet_id = $_POST['outlet_id'];
+        $query = "INSERT INTO user (nama_user,username,password,role,outlet_id) values ('$nama','$username','$pass','$role','$outlet_id')";
     } else {
-        echo "
-            <script>
-                alert('Data Gagal Ditambahkan!');
-                document.location.href = 'pengguna.php';
-            </script>";
+        $query = "INSERT INTO user (nama_user,username,password,role) values ('$nama','$username','$pass','$role')";
     }
-
-    // var_dump($_POST);
-    // die();
+    $execute = bisa($conn, $query);
+    if ($execute == 1) {
+        $success = 'true';
+        $title = 'Berhasil';
+        $message = 'Berhasil menambahkan ' . $role . ' baru';
+        $type = 'success';
+        header('location: pengguna.php?crud=' . $success . '&msg=' . $message . '&type=' . $type . '&title=' . $title);
+    } else {
+        echo "Gagal Tambah Data";
+    }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -205,10 +203,9 @@ if (isset($_POST["btn-simpan"])) {
                                 <div class="form-group">
                                     <label>Jika Role Nya Kasir Maka Pilih Outlet Dimana Dia Akan Ditempatkan</label>
                                     <select name="outlet_id" class="form-control">
-                                        <option value="">Pilih Outlet</option>
-                                        <?php foreach ($outlet as $row) : ?>
-                                            <option value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
-                                        <?php endforeach; ?>
+                                        <?php foreach ($outlet as $key): ?>
+                                            <option value="<?= $key['id_outlet'] ?>"><?= $key['nama_outlet'] ?></option>
+                                        <?php endforeach ?>
                                     </select>
                                 </div>
                                 <div class="text-right">

@@ -1,11 +1,8 @@
 <?php
-
-require_once "../function.php";
-
-$users = query("SELECT * FROM tb_user");
-// var_dump($users);
-// die();
-
+$title = 'pengguna';
+require 'functions.php';
+$query = 'SELECT * FROM user order by role desc';
+$data = ambildata($conn, $query);
 ?>
 
 <!DOCTYPE html>
@@ -166,23 +163,21 @@ $users = query("SELECT * FROM tb_user");
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $i = 1; ?>
-                                        <?php foreach ($users as $user) : ?>
+                                        <?php foreach ($data as $user): ?>
                                             <tr>
-                                                <td><?= $i; ?></td>
-                                                <td><?= $user['nama']; ?></td>
-                                                <td><?= $user['username']; ?></td>
-                                                <td><?= $user['role']; ?></td>
-
+                                                <td></td>
+                                                <td><?= $user['nama_user'] ?></td>
+                                                <td><?= $user['username'] ?></td>
+                                                <td><?= $user['role'] ?></td>
                                                 <td align="center">
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <a href="pengguna_edit.php?id=<?= $user['id']; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                                        <a href="pengguna_hapus.php?id=<?= $user['id']; ?>" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                                        <a href="pengguna_edit.php?id=<?= $user['id_user']; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                                                        <a href="pengguna_hapus.php?id=<?= $user['id_user']; ?>" onclick="return confirm('Yakin hapus data ? ');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <?php $i++; ?>
                                         <?php endforeach; ?>
+
                                     </tbody>
                                 </table>
                             </div>

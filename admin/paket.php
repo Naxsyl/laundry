@@ -1,28 +1,9 @@
 <?php
-
-require_once '../function.php';
-
-$paket = query("
-SELECT 
-    p.id AS id_paket,
-    p.nama_paket AS nama_paket,
-    p.jenis AS jenis_paket,
-    p.harga AS harga_paket,
-    o.id AS outlet_id,
-    o.nama AS outlet_nama
-FROM tb_paket p 
-LEFT JOIN tb_outlet o ON p.id_outlet = o.id
-");
-
-
-if (!$paket) {
-    die("Query error: " . mysqli_error($conn));
-}
-// var_dump($paket);
-// die();
-
+$title ='paket';
+require 'functions.php';
+$query = "SELECT outlet.nama_outlet ,paket.* FROM paket INNER JOIN outlet ON paket.outlet_id = outlet.id_outlet"; 
+$data = ambildata($conn,$query)
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,7 +33,7 @@ if (!$paket) {
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -65,7 +46,7 @@ if (!$paket) {
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
-    <!-- ============================================================== -->
+        <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
     <div id="wrapper">
@@ -84,7 +65,7 @@ if (!$paket) {
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span>
+                        </span> 
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -134,88 +115,85 @@ if (!$paket) {
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                </div>
+                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                 </div>
             </div>
-
+            
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
+               <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Master paket</h4>
-                    </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="#">Paket</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+        <div id="page-wrapper"> 
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Data Master paket</h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Paket</a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <a href="paket_tambah.php" class="btn btn-primary box-title"><i class="fa fa-plus fa-fw"></i> Tambah</a>
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-bordered thead-dark" id="table">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nama Paket</th>
-                                            <th>Jenis</th>
-                                            <th>Harga</th>
-                                            <th>Outlet</th>
-                                            <th width="15%">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $i = 1; ?>
-                                        <?php foreach ($paket as $row) : ?>
-                                            <tr>
-                                                <td><?= $i++; ?></td>
-                                                <td><?= $row['nama_paket']; ?></td>
-                                                <td><?= $row['jenis_paket']; ?></td>
-                                                <td><?= $row['harga_paket']; ?></td>
-                                                </td>
-                                                <td><?= $row['outlet_nama']; ?></td>
-                                                </td>
-                                                <td align="center">
-                                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <a href="paket_edit.php?id=<?= $row['id_paket']; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                                        <a href="paket_hapus.php?id=<?= $row['id_paket']; ?>" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                        <a href="paket_tambah.php" class="btn btn-primary box-title"><i class="fa fa-plus fa-fw"></i> Tambah</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
                     </div>
                 </div>
-                <!-- ============================================================== -->
-                <!-- table -->
-                <!-- ============================================================== -->
-                <div class="row">
-
+                <div class="table-responsive">
+                    <table class="table table-bordered thead-dark" id="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Paket</th>
+                                <th>Jenis</th>
+                                <th>Harga</th>
+                                <th>Outlet</th>
+                                <th width="15%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+ <?php $no = 1; foreach ($data as $paket): ?>
+        <tr>
+        <td></td>
+        <td><?= htmlspecialchars($paket['nama_paket']); ?></td>
+        <td><?= htmlspecialchars($paket['jenis_paket']); ?></td>
+        <td><?= htmlspecialchars($paket['harga']); ?></td>
+        <td><?= htmlspecialchars($paket['nama_outlet']); ?></td>
+        <td align="center">
+        <div class= "btn-group" role = "group" aria-label = "basic example">
+            <a href="paket_edit.php?id=<?= htmlspecialchars($paket ['id_paket']);?>"
+               data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success "><i class= "fa fa-edit"></i></a>
+             <a href="paket_hapus.php?id=<?= htmlspecialchars($paket ['id_paket']);?>"
+              onclick="return confirm('yakin ingin dihapus?');" data-toggle="tooltip" data-placement="bottom" title="hapus" class="btn btn-danger"><i class= "fa fa-trash"></i></a>
+                </div>
+        </td>
+    </tr>
+<?php endforeach; ?>
+                                                    </tbody>
+                    </table>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- table -->
+    <!-- ============================================================== -->
+    <div class="row">
+        
+    </div>
+</div>
+<!-- /.container-fluid -->
+<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -250,62 +228,58 @@ if (!$paket) {
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click', () => {
+        $('#btn_hapus').on('click',() => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready(function() {
+        $(document).ready( function () {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [{
+                "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }],
-                "order": [
-                    [1, 'asc']
-                ],
-                "language": {
-                    "sProcessing": "Sedang memproses ...",
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord": "Maaf data tidak tersedia",
-                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total data)",
-                    "sSearch": "Cari",
-                    "oPaginate": {
-                        "sFirst": "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext": "Selanjutnya",
-                        "sLast": "Terakhir"
+                } ],
+                "order": [[ 1, 'asc' ]],
+                "language" : {
+                    "sProcessing" : "Sedang memproses ...",
+                    "lengthMenu" : "Tampilkan _MENU_ data per halaman",
+                    "zeroRecord" : "Maaf data tidak tersedia",
+                    "info" : "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
+                    "infoEmpty" : "Tidak ada data yang tersedia",
+                    "infoFiltered" : "(difilter dari _MAX_ total data)",
+                    "sSearch" : "Cari",
+                    "oPaginate" : {
+                        "sFirst" : "Pertama",
+                        "sPrevious" : "Sebelumnya",
+                        "sNext" : "Selanjutnya",
+                        "sLast" : "Terakhir"
                     }
                 }
             });
-            t.on('order.dt search.dt', function() {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
 
-
-        });
-        $('#btn-refresh').on('click', () => {
+            
+        } );
+        $('#btn-refresh').on('click',() => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if (index == -1) {
+            if(index == -1){
                 window.location = window.location.href;
-
+                
             }
-            if (index != -1) {
-                window.location = oldURL.substring(0, index)
+            if(index != -1){
+                window.location = oldURL.substring(0,index)
             }
-
+            
         });
+
     </script>
 
     <br />
