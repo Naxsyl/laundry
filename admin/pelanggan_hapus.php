@@ -1,22 +1,12 @@
 <?php
+require 'functions.php';
+$sql = "DELETE FROM member WHERE id_member = " . $_GET['id'];
+$exe = mysqli_query($conn, $sql);
 
-require_once '../function.php';
-
-$id = $_GET["id"];
-
-
-if (hapus_member($id) > 0) {
-    echo "
-        <script>
-            alert('Data Berhasil Dihapus!');
-            document.location.href = 'pelanggan.php';
-        </script>
-        ";
-} else {
-    echo "
-            <script>
-                alert('Data Gagal Dihapus!');
-                document.location.href = 'pelanggan.php';
-            </script>
-            ";
+if ($exe) {
+    $success = 'true';
+    $title = 'Berhasil';
+    $message = 'Menghapus Data';
+    $type = 'success';
+    header('location: pelanggan.php?crud=' . $success . '&msg=' . $message . '&type=' . $type . '&title=' . $title);
 }

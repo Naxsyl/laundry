@@ -1,69 +1,87 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="assets/login/fonts/icomoon/style.css">
-
-  <link rel="stylesheet" href="assets/login/css/owl.carousel.min.css">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="assets/login/css/bootstrap.min.css">
-
-  <!-- Style -->
-  <link rel="stylesheet" href="assets/login/css/style.css">
-
-  <title>Login Aplikasi Laundry APP</title>
+	<title>Login V15</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="assets/login/images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/login/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/login/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="assets/login/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/login/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/login/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="assets/login/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/login/css/util.css">
+	<link rel="stylesheet" type="text/css" href="assets/login/css/main.css">
+<!--===============================================================================================-->
 </head>
-
 <body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-form-title" style="background-image: url(assets/login/images/bg-01.jpg);">
+					<span class="login100-form-title-1">
+						Aplikasi Pengelolaan Laundry
+					</span>
+				</div>
 
+				<form class="login100-form validate-form" method="POST" action="ceklogin.php">
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+						<span class="label-input100">Username</span>
+						<input class="input100" type="text" name="username" placeholder="Enter username">
+						<span class="focus-input100"></span>
+					</div>
 
-  <div class="d-lg-flex half">
-    <div class="bg order-1 order-md-2" style="background-image: url('assets/login/images/bg_1.jpg');"></div>
-    <div class="contents order-2 order-md-1">
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+						<span class="label-input100">Password</span>
+						<input class="input100" type="password" name="password" placeholder="Enter password">
+						<span class="focus-input100"></span>
+					</div>
+					<?php if (isset($_GET['msg'])): ?>
+						<small class="text-danger"><?= $_GET['msg'];  ?></small>
+					<?php endif ?>
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" type="submit"> 
+							Login
+						</button>
+					</div>
+					<div class="container-login100-form-btn mt-3">
+						<small>Dibuat Oleh FIKRI SUHERI | Template Login By ColorLib</small>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+<!--===============================================================================================-->
+	<!-- <script src="assets/login/vendor/jquery/jquery-3.2.1.min.js"></script>  -->
+<!--===============================================================================================-->
+	<!-- <script src="assets/login/vendor/animsition/js/animsition.min.js"></script>  -->
+<!--===============================================================================================-->
+	<!-- <script src="assets/login/vendor/bootstrap/js/popper.js"></script>  -->
+	<!-- <script src="assets/login/vendor/bootstrap/js/bootstrap.min.js"></script>  -->
+<!--===============================================================================================-->
+	<!-- <script src="assets/login/vendor/select2/select2.min.js"></script>  -->
+<!--===============================================================================================-->
+	<!-- <script src="assets/login/vendor/daterangepicker/moment.min.js"></script>  -->
+	<!-- <script src="assets/login/vendor/daterangepicker/daterangepicker.js"></script>  -->
+<!--===============================================================================================-->
+	<!-- <script src="assets/login/vendor/countdowntime/countdowntime.js"></script>  -->
+<!--===============================================================================================-->
+	<!-- <script src="js/main.js"></script> -->
 
-      <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-md-7">
-            <h3>Login to <strong>Laundry APP</strong></h3>
-            <form action="ceklogin.php" method="post">
-              <div class="form-group first">
-                <input type="text" class="form-control" placeholder="Username" name="username">
-              </div>
-              <div class="form-group last mb-3">
-                <input type="password" class="form-control" placeholder="Password" name="password">
-              </div>
-
-              <div class="d-flex mb-5 align-items-center">
-                <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
-                  <input type="checkbox" checked="checked" />
-                  <div class="control__indicator"></div>
-                </label>
-                <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span>
-              </div>
-
-              <input type="submit" value="Log In" class="btn btn-block btn-primary">
-
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-  </div>
-
-
-
-  <script src="assets/login/js/jquery-3.3.1.min.js"></script>
-  <script src="assets/login/js/popper.min.js"></script>
-  <script src="assets/login/js/bootstrap.min.js"></script>
-  <script src="assets/login/js/main.js"></script>
 </body>
-
 </html>
