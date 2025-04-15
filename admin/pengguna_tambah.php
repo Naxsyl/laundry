@@ -1,31 +1,31 @@
 <?php
-$title = 'pengguna';
+$title ='pengguna';
 require 'functions.php';
 $outlet = ambildata($conn, 'SELECT * FROM outlet');
-if (isset($_POST['btn-simpan'])) {
-    $nama     = $_POST['nama_user'];
+
+if(isset($_POST['btn-simpan'])){
+    $nama = $_POST['nama_user'];
     $username = $_POST['username'];
-    $pass     = md5($_POST['password']);
-    $role     = $_POST['role'];
-    if ($role == 'kasir') {
+    $pass = md5($_POST['password']);
+    $role = $_POST['role'];
+    if($role == 'kasir'){
         $outlet_id = $_POST['outlet_id'];
-        $query = "INSERT INTO user (nama_user,username,password,role,outlet_id) values ('$nama','$username','$pass','$role','$outlet_id')";
-    } else {
-        $query = "INSERT INTO user (nama_user,username,password,role) values ('$nama','$username','$pass','$role')";
+        $query = "INSERT INTO user (nama_user, username, password, role, outlet_id) values ('$nama', '$username', '$pass', '$role', '$outlet_id)";
+    }else{
+        $query = "INSERT INTO user (nama_user, username, password, role) values ('$nama', '$username', '$pass', '$role' )";
     }
-    $execute = bisa($conn, $query);
-    if ($execute == 1) {
+    $execute = bisa($conn,$query);
+    if($execute == 1){
         $success = 'true';
         $title = 'Berhasil';
-        $message = 'Berhasil menambahkan ' . $role . ' baru';
+        $message = 'Berhasil mengubah' .$role. ' baru';
         $type = 'success';
         header('location: pengguna.php?crud=' . $success . '&msg=' . $message . '&type=' . $type . '&title=' . $title);
-    } else {
+    } else{
         echo "Gagal Tambah Data";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,7 +55,7 @@ if (isset($_POST['btn-simpan'])) {
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -68,7 +68,7 @@ if (isset($_POST['btn-simpan'])) {
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
-    <!-- ============================================================== -->
+        <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
     <div id="wrapper">
@@ -87,7 +87,7 @@ if (isset($_POST['btn-simpan'])) {
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span>
+                        </span> 
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -137,88 +137,87 @@ if (isset($_POST['btn-simpan'])) {
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                </div>
+                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                 </div>
             </div>
-
+            
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
+               <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Data Master Pengguna</h4>
-                    </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="outlet.php">Pengguna</a></li>
-                            <li><a href="#">Tambah Pengguna</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+        <div id="page-wrapper"> 
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Data Master Pengguna</h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="outlet.php">Pengguna</a></li>
+                <li><a href="#">Tambah Pengguna</a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                          <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-primary box-title"><i class="fa fa-arrow-left fa-fw"></i> Kembali</a>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <form method="post" action="">
-                                <div class="form-group">
-                                    <label>Nama Pengguna</label>
-                                    <input type="text" name="nama_user" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Username</label>
-                                    <input type="text" name="username" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" name="password" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Role</label>
-                                    <select name="role" class="form-control">
-                                        <option value="admin">Admin</option>
-                                        <option value="owner">Owner</option>
-                                        <option value="kasir">Kasir</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Jika Role Nya Kasir Maka Pilih Outlet Dimana Dia Akan Ditempatkan</label>
-                                    <select name="outlet_id" class="form-control">
-                                        <?php foreach ($outlet as $key): ?>
-                                            <option value="<?= $key['id_outlet'] ?>"><?= $key['nama_outlet'] ?></option>
-                                        <?php endforeach ?>
-                                    </select>
-                                </div>
-                                <div class="text-right">
-                                    <button type="reset" class="btn btn-danger">Reset</button>
-                                    <button type="submit" name="btn-simpan" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="col-md-6 text-right">
+                        <button id="btn-refresh" class="btn btn-primary box-title text-right" title="Refresh Data"><i class="fa fa-refresh" id="ic-refresh"></i></button>
                     </div>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="white-box">
+                <form method="post" action="">
+                <div class="form-group">
+                    <label>Nama Pengguna</label>
+                    <input type="text" name="nama_user" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="text" name="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="role" class="form-control">
+                        <option value="admin">Admin</option>
+                        <option value="owner">Owner</option>
+                        <option value="kasir">Kasir</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Jika Role Nya Kasir Maka Pilih Outlet Dimana Dia Akan Ditempatkan</label>
+                    <select name="outlet_id" class="form-control">
+                              <?php foreach ($outlet as $key): ?>
+                                <option value="<?= $key['id_outlet']; ?>"><?= $key['nama_outlet'] ?></option>
+                                <?php endforeach; ?>
+                   </select>
+                </div>
+                <div class="text-right">
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                    <button type="submit" name="btn-simpan" class="btn btn-primary">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -253,65 +252,63 @@ if (isset($_POST['btn-simpan'])) {
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click', () => {
+        $('#btn_hapus').on('click',() => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready(function() {
+        $(document).ready( function () {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [{
+                "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }],
-                "order": [
-                    [1, 'asc']
-                ],
-                "language": {
-                    "sProcessing": "Sedang memproses ...",
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord": "Maaf data tidak tersedia",
-                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total data)",
-                    "sSearch": "Cari",
-                    "oPaginate": {
-                        "sFirst": "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext": "Selanjutnya",
-                        "sLast": "Terakhir"
+                } ],
+                "order": [[ 1, 'asc' ]],
+                "language" : {
+                    "sProcessing" : "Sedang memproses ...",
+                    "lengthMenu" : "Tampilkan _MENU_ data per halaman",
+                    "zeroRecord" : "Maaf data tidak tersedia",
+                    "info" : "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
+                    "infoEmpty" : "Tidak ada data yang tersedia",
+                    "infoFiltered" : "(difilter dari _MAX_ total data)",
+                    "sSearch" : "Cari",
+                    "oPaginate" : {
+                        "sFirst" : "Pertama",
+                        "sPrevious" : "Sebelumnya",
+                        "sNext" : "Selanjutnya",
+                        "sLast" : "Terakhir"
                     }
                 }
             });
-            t.on('order.dt search.dt', function() {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
 
-
-        });
-        $('#btn-refresh').on('click', () => {
+            
+        } );
+        $('#btn-refresh').on('click',() => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if (index == -1) {
+            if(index == -1){
                 window.location = window.location.href;
-
+                
             }
-            if (index != -1) {
-                window.location = oldURL.substring(0, index)
+            if(index != -1){
+                window.location = oldURL.substring(0,index)
             }
-
+            
         });
+
     </script>
 
     <br />
+<b>Warning</b>:  Undefined array key "crud" in <b>C:\xampp\htdocs\sepdullah\laundry\admin\layout_footer.php</b> on line <b>91</b><br />
 </body>
 
 </html>
+ 

@@ -1,5 +1,9 @@
-
- 
+<?php
+$title ='pelanggan';
+require 'functions.php';
+$query = "SELECT * FROM member "; 
+$data = ambildata($conn,$query)
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -157,90 +161,26 @@
                                 <th>No KTP</th>
                                 <th width="15%">Aksi</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                                                              <tr>
-                                  <td></td>
-                                  <td>Kailendra</td>
-                                  <td>Jl. Palapa No. 2</td>
-                                  <td>L</td>
-                                  <td>081287446805</td>
-                                  <td>3174031809870003</td>
-             
-                                  <td align="center">
-                                  <div class="btn-group" role="group" aria-label="Basic example"> 
-                                  <a href="pelanggan_edit.php?id=5" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="Detail" class="btn btn-warning"><i class="fa fa-eye"></i></a>
-                                  <a href="pelanggan_hapus.php?id=5" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                  </td>
-                                </tr>
-                                                           <tr>
-                                  <td></td>
-                                  <td>rdr</td>
-                                  <td>jalan raya</td>
-                                  <td>L</td>
-                                  <td>08123</td>
-                                  <td>1231231313123131</td>
-             
-                                  <td align="center">
-                                  <div class="btn-group" role="group" aria-label="Basic example"> 
-                                  <a href="pelanggan_edit.php?id=6" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="Detail" class="btn btn-warning"><i class="fa fa-eye"></i></a>
-                                  <a href="pelanggan_hapus.php?id=6" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                  </td>
-                                </tr>
-                                                           <tr>
-                                  <td></td>
-                                  <td>Kailendra</td>
-                                  <td>kebagusan</td>
-                                  <td>P</td>
-                                  <td>0838</td>
-                                  <td>1234</td>
-             
-                                  <td align="center">
-                                  <div class="btn-group" role="group" aria-label="Basic example"> 
-                                  <a href="pelanggan_edit.php?id=7" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="Detail" class="btn btn-warning"><i class="fa fa-eye"></i></a>
-                                  <a href="pelanggan_hapus.php?id=7" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                  </td>
-                                </tr>
-                                                           <tr>
-                                  <td></td>
-                                  <td>zacky</td>
-                                  <td>jl. raya bogor</td>
-                                  <td>L</td>
-                                  <td>0893833778</td>
-                                  <td>3234234</td>
-             
-                                  <td align="center">
-                                  <div class="btn-group" role="group" aria-label="Basic example"> 
-                                  <a href="pelanggan_edit.php?id=8" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="Detail" class="btn btn-warning"><i class="fa fa-eye"></i></a>
-                                  <a href="pelanggan_hapus.php?id=8" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                  </td>
-                                </tr>
-                                                           <tr>
-                                  <td></td>
-                                  <td>khrisna</td>
-                                  <td>amskdna</td>
-                                  <td>L</td>
-                                  <td>25549498549</td>
-                                  <td>3123094839853450</td>
-             
-                                  <td align="center">
-                                  <div class="btn-group" role="group" aria-label="Basic example"> 
-                                  <a href="pelanggan_edit.php?id=9" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="Detail" class="btn btn-warning"><i class="fa fa-eye"></i></a>
-                                  <a href="pelanggan_hapus.php?id=9" onclick="return confirm('Yakin hapus data?');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                  </td>
-                                </tr>
-                                                         
-                                                    </tbody>
+                            </thead>
+                            <tbody>
+    <?php $no = 1; foreach ($data as $member): ?>
+<tr>
+    <td><?= $no; ?></td>
+    <td><?= $member['nama_member']; ?></td>
+    <td><?= $member['alamat_member']; ?></td>
+    <td><?= $member['jenis_kelamin']; ?></td>
+    <td><?= $member['telp_member']; ?></td>
+    <td><?= $member['no_ktp']; ?></td>
+    <td align="center">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a href="pelanggan_edit.php?id=<?= htmlspecialchars($member['id_member']);?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success"><i class="fa fa-edit"></i></a>
+            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Detail" class="btn btn-warning"><i class="fa fa-eye"></i></a>
+            <a href="pelanggan_hapus.php?id=<?= htmlspecialchars($member['id_member']);?>" onclick="return confirm('Yakin hapus data ? ');" data-toggle="tooltip" data-placement="bottom" title="Hapus" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+        </div>
+    </td>
+</tr>
+<?php $no++; endforeach; ?>
+     </tbody>
                     </table>
                 </div>
             </div>
@@ -344,6 +284,7 @@
     </script>
 
     <br />
+<b>Warning</b>:  Undefined array key "crud" in <b>C:\xampp\htdocs\sepdullah\laundry\admin\layout_footer.php</b> on line <b>91</b><br />
 </body>
 
 </html>

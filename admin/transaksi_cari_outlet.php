@@ -1,4 +1,9 @@
-
+<?php
+$title = 'pelanggan';
+require 'functions.php';
+$query = 'SELECT * FROM outlet';
+$data = ambildata($conn,$query);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -158,27 +163,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                                                              <tr>
+                              <?php foreach($data as $member): ?>
+                                <tr>
                                     <td></td>
-                                    <td>Londre Cab. Pasar Minggu</td>
-                                    <td>Jalan Palapa No. 2</td>
-                                    <td>081287446805</td>
+                                    <td><?= $member['nama_outlet'] ?></td>
+                                    <td><?= $member['alamat_outlet'] ?></td>
+                                    <td><?= $member['telp_outlet'] ?></td>
                                     <td align="center">
-                                          <a href="transaksi_tambah.php?id=5&outlet_id=26" 
+                                          <a href="transaksi_tambah.php?id=<?= $_GET['id']; ?>&outlet_id=<?= $member['id_outlet'] ?>" 
                                       data-toggle="tooltip" data-placement="bottom" title="Pilih" class="btn btn-primary btn-block">PILIH</a>
                                     </td>
                                 </tr>
-                                                            <tr>
-                                    <td></td>
-                                    <td>Londre Cab. Mampang Prapatan</td>
-                                    <td>Jl. Mampang Prapatan 1</td>
-                                    <td>02179432874</td>
-                                    <td align="center">
-                                          <a href="transaksi_tambah.php?id=5&outlet_id=27" 
-                                      data-toggle="tooltip" data-placement="bottom" title="Pilih" class="btn btn-primary btn-block">PILIH</a>
-                                    </td>
-                                </tr>
-                                                                                </tbody>
+                            <?php endforeach; ?>
+                                                    </tbody>
                     </table>
                 </div>
             </div>

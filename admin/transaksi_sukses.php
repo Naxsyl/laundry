@@ -1,5 +1,11 @@
-
- 
+<?php
+$title = 'transaksi';
+require 'functions.php';
+$query = 'SELECT transaksi.*,member.nama_member , detail_transaksi.total_harga FROM transaksi 
+INNER JOIN member ON member.id_member = transaksi.member_id 
+INNER JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi WHERE transaksi.id_transaksi = ' . $_GET['id'];
+$data = ambilsatubaris($conn,$query);
+?> 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -149,9 +155,9 @@
                 </div>
                 <div class="row">
                 <div class="col-md-12 text-center">
-                        <h3>Pesanan Atas Nama Kailendra Behasil Di Simpan</h3>
-                        <strong>Kode Invoice DRY202501221500</strong><br>
-                        <strong>Total Pembayaran 56000</strong><br><br>
+                        <h3>Pesanan Atas Nama <?= $data['nama_member'] ?> Behasil Di Simpan</h3>
+                        <strong>Kode Invoice <?= $data['kode_invoice'] ?></strong><br>
+                        <strong>Total Pembayaran <?= $data['total_harga'] ?></strong><br><br>
                         <a href="transaksi.php" class="btn btn-primary">Kembali Ke Menu Utama</a>
                     </div>
                 </div>

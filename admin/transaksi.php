@@ -1,3 +1,10 @@
+<?php
+$title = 'transaksi';
+require 'functions.php';
+$query = "SELECT transaksi.*,member.nama_member , detail_transaksi.total_harga FROM transaksi INNER JOIN member ON member.id_member = transaksi.member_id INNER JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi ";
+$data = ambildata($conn,$query);
+?> 
+ 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -158,40 +165,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                                                            <tr>
+                            <?php foreach($data as $transaksi): ?>
+                                <tr>
                                     <td></td>
-                                    <td>DRY202501112841</td>
-                                    <td>Alexander Romario</td>
-                                    <td>selesai</td>
-                                    <td>dibayar</td>
-                                    <td>100000</td>
+                                    <td><?= $transaksi['kode_invoice'] ?></td>
+                                    <td><?= $transaksi['nama_member'] ?></td>
+                                    <td><?= $transaksi['status'] ?></td>
+                                    <td><?= $transaksi['status_bayar'] ?></td>
+                                    <td><?= $transaksi['total_harga'] ?></td>
                                     <td align="center">
-                                          <a href="transaksi_detail.php?id=36" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
+                                          <a href="transaksi_detail.php?id=<?= $transaksi['id_transaksi']; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
                                     </td>
                                 </tr>
-                                                            <tr>
-                                    <td></td>
-                                    <td>DRY202501114457</td>
-                                    <td>Kailendra</td>
-                                    <td>diambil</td>
-                                    <td>dibayar</td>
-                                    <td>60000</td>
-                                    <td align="center">
-                                          <a href="transaksi_detail.php?id=37" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <td></td>
-                                    <td>DRY202501115359</td>
-                                    <td>Alexander Romario</td>
-                                    <td>selesai</td>
-                                    <td>dibayar</td>
-                                    <td>120000</td>
-                                    <td align="center">
-                                          <a href="transaksi_detail.php?id=38" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                    </td>
-                                </tr>
-                                                    </tbody>
+                            <?php endforeach; ?>
+                        </tbody>
                     </table>
                 </div>
             </div>

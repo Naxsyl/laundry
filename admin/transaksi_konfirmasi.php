@@ -1,5 +1,13 @@
-
- 
+<?php
+$title = 'transaksi';
+require 'functions.php';
+$query = "SELECT transaksi.*,member.nama_member , 
+detail_transaksi.total_harga FROM transaksi 
+INNER JOIN member ON member.id_member = transaksi.member_id 
+INNER JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi 
+WHERE transaksi.status_bayar='belum'";
+$data = ambildata($conn,$query);
+?> 
  
 <!DOCTYPE html>
 <html lang="en">
@@ -159,17 +167,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                                                           <tr>
+                           <?php foreach($data as $transaksi): ?>
+                                <tr>
                                     <td></td>
-                                    <td>DRY202501221500</td>
-                                    <td>Kailendra</td>
-                                    <td>baru</td>
-                                    <td>56000</td>
+                                    <td><?= $transaksi['kode_invoice'] ?></td>
+                                    <td><?= $transaksi['nama_member'] ?></td>
+                                    <td><?= $transaksi['status'] ?></td>
+                                    <td><?= $transaksi['total_harga'] ?></td>
                                     <td align="center">
-                                          <a href="transaksi_bayar.php?id=39" data-toggle="tooltip" data-placement="bottom" title="Pilih" class="btn btn-primary btn-block">Pilih</a>
+                                          <a href="transaksi_bayar.php?id=<?= $transaksi['id_transaksi']; ?>" data-toggle="tooltip" data-placement="bottom" title="Pilih" class="btn btn-primary btn-block">Pilih</a>
                                     </td>
                                 </tr>
-                                                                                                            </tbody>
+                            <?php endforeach; ?>
+                                                                                </tbody>
                     </table>
                 </div>
             </div>

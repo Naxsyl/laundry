@@ -1,4 +1,30 @@
+<?php
+$title ='pelanggan';
+require 'functions.php';
+$query = 'SELECT * FROM member';
+$data = ambildata($conn, $query);
 
+if(isset($_POST['btn-simpan'])){
+    $nama = stripslashes($_POST['nama_member']);
+    $alamat = stripslashes($_POST['alamat_member']);
+    $jenis = stripslashes($_POST['jenis_kelamin']);
+    $telp = stripslashes($_POST['telp_member']);
+    $no_ktp = stripslashes($_POST['no_ktp']);
+
+    $query = "INSERT INTO member (nama_member, alamat_member, jenis_kelamin, telp_member, no_ktp) values ('$nama', '$alamat', '$jenis', '$telp', '$no_ktp')";
+    $execute = bisa($conn,$query);
+    if($execute == 1){
+        $success = 'true';
+        $title = 'Berhasil';
+        $message = 'Berhasil menambah member Baru';
+        $type = 'success';
+        header('location: pelanggan.php?crud=' . $success . '&msg=' . $message . '&type=' . $type . '&title=' . $title);
+    } else{
+        echo "Gagal Tambah Data";
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -275,6 +301,7 @@
     </script>
 
     <br />
+<b>Warning</b>:  Undefined array key "crud" in <b>C:\xampp\htdocs\sepdullah\laundry\admin\layout_footer.php</b> on line <b>91</b><br />
 </body>
 
 </html>

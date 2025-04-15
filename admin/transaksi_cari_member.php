@@ -1,4 +1,9 @@
-
+<?php
+$title = 'pelanggan';
+require 'functions.php';
+$query = 'SELECT * FROM member';
+$data = ambildata($conn,$query);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -157,31 +162,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                                                            <tr>
+                            <?php foreach($data as $member): ?>
+                                <tr>
                                     <td></td>
-                                    <td>Kailendra</td>
-                                    <td>Jl. Palapa No. 2</td>
-                                    <td>P</td>
-                                    <td>081287446805</td>
-                                    <td>3174031809870003</td>
+                                    <td><?= $member{'nama_member'}?></td>
+                                    <td><?= $member{'alamat_member'}?></td>
+                                    <td><?= $member{'jenis_kelamin'}?></td>
+                                    <td><?= $member{'telp_member'}?></td>
+                                    <td><?= $member{'no_ktp'}?></td>
                                     <td align="center">
-                                    <a href="transaksi_cari_outlet.php?id=5"
+                                    <a href="transaksi_cari_outlet.php?id=<?=$member ['id_member'];?>"
                                         data-toggle="tooltip" data-placement="bottom" title="PILIH" class="btn btn-primary btn-block">PILIH</a>
                                     </td>
                                 </tr>
-                                                                <tr>
-                                    <td></td>
-                                    <td>Alexander Romario</td>
-                                    <td>Jl. AUP Raya No</td>
-                                    <td>L</td>
-                                    <td>01287446805</td>
-                                    <td>31740213456789712</td>
-                                    <td align="center">
-                                    <a href="transaksi_cari_outlet.php?id=6"
-                                        data-toggle="tooltip" data-placement="bottom" title="PILIH" class="btn btn-primary btn-block">PILIH</a>
-                                    </td>
-                                </tr>
-                                                         </tbody>
+                                <?php endforeach; ?>
+                         </tbody>
                     </table>
                 </div>
             </div>

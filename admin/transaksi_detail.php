@@ -1,28 +1,27 @@
 <?php
 require 'functions.php';
-$status = ['baru','proses','selesai','diambil'];
-$query = "SELECT transaksi.*,member.nama_member , detail_transaksi.*,outlet.nama_outlet,paket.nama_paket FROM transaksi 
-INNER JOIN member ON member.id_member = transaksi.member_id 
-INNER JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi 
-INNER JOIN outlet ON outlet.id_outlet = transaksi.outlet_id 
-INNER JOIN paket ON paket.outlet_id = transaksi.outlet_id WHERE transaksi.id_transaksi=".$_GET['id'];
-$data = ambildata($conn,$query);
+$id_transaksi = $_GET['id'];
 
-if(isset($_POST['btn-simpan'])){
+$status = ['baru', 'proses', 'selesai', 'diambil'];
+
+$query = "SELECT *, detail_transaksi.*, outlet.*, member.*, paket.*
+          FROM transaksi
+          LEFT JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi
+          LEFT JOIN outlet ON outlet.id_outlet = transaksi.outlet_id
+          LEFT JOIN member ON member.id_member = transaksi.member_id
+          LEFT JOIN paket ON paket.id_paket = detail_transaksi.paket_id
+          WHERE id_transaksi = '$id_transaksi'";
+$result = $conn->query($query);
+$data = $result->fetch_assoc();
+
+if (isset($_POST['btn-simpan'])) {
     $status = $_POST['status'];
-    $query = "UPDATE transaksi SET status = '$status' WHERE id_transaksi =" . $_GET['id'];
-    $execute = bisa($conn,$query);
-    if($execut == 1){
-        $succes = 'true';
-        $title = 'Berhasil';
-        $message = 'Berhasil mengubah status transaksi';
-        $type = 'success';
-        header('location: transaksi.php?crud=' .$success.'&msg='. $message .'&type='. $type .'&title='. $title );
-    }else{
-        echo "Gagal Tambah Data";
-    }
-}
 
+    $query = "UPDATE transaksi SET status = '$status' WHERE id_transaksi = '$id_transaksi'";
+    $conn->query($query);
+    
+    header('Location: transaksi.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -187,57 +186,58 @@ if(isset($_POST['btn-simpan'])){
         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div class="white-box">
                 <form method="post" action="">
-                <div class="form-group">
-                    <label>Kode Invoice</label>
-                    <input type="text" name="kode_invoice" class="form-control" readonly="" value="DRY202309250927">
-                </div>
-                <div class="form-group">
-                    <label>Outlet</label>
-                    <input type="text" name="username" class="form-control" readonly="" value="Londre Cab. Palapa Pasar Minggu">
-                </div>
-                <div class="form-group">
-                    <label>Pelanggan</label>
-                    <input type="text" name="password" class="form-control" readonly="" value="Kailendra Abidzarabbani"> 
-                </div>
-                <div class="form-group">
-                    <label>Jenis Paket</label>
-                    <input type="text" name="password" class="form-control" readonly="" value="Paket Hemat Kilat"> 
-                </div>
-                <div class="form-group">
-                    <label>Jumlah</label>
-                    <input readonly=""   type="text" name="qty" class="form-control" value="3"> 
-                </div>
-                <div class="form-group">
-                    <label>Total Harga</label>
-                    <input readonly=""   type="text" name="biaya_tambahan" class="form-control" value="45000"> 
-                </div>
-                                    <div class="form-group">
-                        <label>Total Bayar</label>
-                        <input readonly=""   type="text" name="biaya_tambahan" class="form-control" value="100000"> 
+                                <div class="form-group">
+                                    <label>Kode Invoice</label>
+                                    <input type="text" name="kode_invoice" class="form-control" readonly="" value="<?= $data['kode_invoice'] ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Outlet</label>
+                                    <input type="text" name="username" class="form-control" readonly="" value="<?= $data['nama_outlet'] ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Pelanggan</label>
+                                    <input type="text" name="password" class="form-control" readonly="" value="<?= $data['nama_member'] ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Jenis Paket</label>
+                                    <input type="text" name="password" class="form-control" readonly="" value="<?= $data['nama_paket'] ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Jumlah</label>
+                                    <input readonly="" type="text" name="qty" class="form-control" value="<?= $data['qty'] ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Total Harga</label>
+                                    <input readonly="" type="text" name="biaya_tambahan" class="form-control" value="<?= $data['total_harga'] ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Total Bayar</label>
+                                    <input readonly="" type="text" name="biaya_tambahan" class="form-control" value="<?= $data['total_bayar'] ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Di Bayar Pada Tanggal </label>
+                                    <input readonly="" type="text" name="biaya_tambahan" class="form-control" value="<?= $data['tgl_pembayaran'] ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Status Transaksi</label>
+                                    <select name="status" class="form-control">
+                                        <option value="<?= $data['status'] ?>" selected><?= $data['status'] ?></option>
+                                        <?php foreach ($status as $s): ?>
+                                            <?php if ($s != $data['status']): ?>
+                                                <option value="<?= $s ?>"><?= $s ?></option>
+                                            <?php endif ?>
+                                        <?php endforeach ?>
+                                    </select>
+                                    <small>Klik Tombol Ubah Untuk Menyimpan Perubahan Transaksi</small>
+                                </div>
+                                <div class="text-right">
+                                    <button type="submit" name="btn-simpan" class="btn btn-primary">Ubah</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Di Bayar Pada Tanggal </label>
-                        <input readonly=""   type="text" name="biaya_tambahan" class="form-control" value="2023-09-25 05:27:58"> 
-                    </div>
-                                    <div class="form-group">
-                        <label>Status Transaksi</label>
-                        <select name="status" class="form-control">
-                                                                                    <option value="baru">baru</option>
-                                                                                    <option value="proses" selected>proses</option>
-                                                        <option value="proses">proses</option>
-                                                                                    <option value="selesai">selesai</option>
-                                                                                    <option value="diambil">diambil</option>
-                                                    </select>
-                        <small>Klik Tombol Ubah Untuk Menyimpan Perubahan Transaksi</small>
-                    </div>
-                <div class="text-right">
-                    <button type="submit" name="btn-simpan" class="btn btn-primary">Ubah</button>
                 </div>
-                </form>
             </div>
-        </div>
-    </div>
-</div>
 <!-- /.container-fluid -->
 <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>

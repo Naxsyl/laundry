@@ -1,13 +1,14 @@
 <?php
-$title = 'dashboard';
+$title ='dashboard';
 require 'functions.php';
-$jTransaksi = ambilsatubaris($conn, 'SELECT COUNT(id_transaksi) as jumlahtransaksi FROM transaksi');
-$jPelanggan = ambilsatubaris($conn, 'SELECT COUNT(id_member) as jumlahmember FROM member');
-$joutlet = ambilsatubaris($conn, 'SELECT COUNT(id_outlet) as jumlahoutlet FROM outlet');
-$query = "SELECT transaksi.*,member.nama_member , detail_transaksi.total_harga FROM transaksi INNER JOIN member ON member.id_member = transaksi.member_id INNER JOIN detail_transaksi ON detail_transaksi.transaksi_id = transaksi.id_transaksi   ORDER BY transaksi.id_transaksi DESC LIMIT 10";
-$data = ambildata($conn, $query);
+$jTransaksi = ambilsatubaris($conn,'SELECT COUNT(id_transaksi) as jumlahtransaksi FROM transaksi');
+$jPelanggan = ambilsatubaris($conn,'SELECT COUNT(id_member)as jumlahmember FROM member');
+$outlet = ambilsatubaris($conn,'SELECT COUNT(id_outlet)as jumlahoutlet FROM outlet');
+$query = "SELECT transaksi.*,member.nama_member , detail_transaksi.total_harga FROM transaksi INNER JOIN member ON member.id_member =transaksi.member_id
+ INNER JOIN detail_transaksi on detail_transaksi.transaksi_id = transaksi.id_transaksi 
+ ORDER BY transaksi.id_transaksi DESC LIMIT 10"; 
+$data = ambildata($conn,$query)
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,7 +38,7 @@ $data = ambildata($conn, $query);
     <!-- color CSS -->
     <link href="../assets/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/DataTables/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -50,12 +51,12 @@ $data = ambildata($conn, $query);
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
-    <div class="preloader">
+        <div class="preloader">
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
         </svg>
     </div>
-    <!-- ============================================================== -->
+        <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
     <div id="wrapper">
@@ -74,7 +75,7 @@ $data = ambildata($conn, $query);
                         <!-- Logo text image you can use text also -->
                         <span class="hidden-xs text-dark">
                             APP
-                        </span>
+                        </span> 
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -124,111 +125,110 @@ $data = ambildata($conn, $query);
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
-                </div>
+                     <a href="logout.php" class="btn btn-danger btn-block waves-effect waves-light">Logout</a>
+                 </div>
             </div>
-
+            
         </div>
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
+               <!-- ============================================================== -->
         <!-- Page Content -->
         <!-- ============================================================== -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Dashboard</h4>
-                    </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="#">Dashboard</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
-                <!-- /.row -->
-                <!-- ============================================================== -->
-                <!-- Different data widgets -->
-                <!-- ============================================================== -->
-                <!-- .row -->
-                <div class="row">
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Outlet</h3>
-                            <ul class="list-inline two-part">
-                                <li>
-                                    <div id="sparklinedash"></div>
-                                </li>
-                                <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success"><?= htmlspecialchars($joutlet['jumlahoutlet']); ?></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Pelanggan</h3>
-                            <ul class="list-inline two-part">
-                                <li>
-                                    <div id="sparklinedash2"></div>
-                                </li>
-                                <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple"><?= htmlspecialchars($jPelanggan['jumlahmember']); ?></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Transaksi</h3>
-                            <ul class="list-inline two-part">
-                                <li>
-                                    <div id="sparklinedash3"></div>
-                                </li>
-                                <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info"><?= htmlspecialchars($jTransaksi['jumlahtransaksi']); ?></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12">
-                        <div class="white-box">
-                            <h3 class="box-title">10 Transaksi Terbaru</h3>
-                            <div class="table-responsive">
-                                <table class="table ">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Invoice</th>
-                                            <th>Member</th>
-                                            <th>Status</th>
-                                            <th>Pemabayaran</th>
-                                            <th>Total Harga</th>
-                                            <th width="15%">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $no = 1;
-                                        foreach ($data as $transaksi): ?>
-                                            <tr>
-                                                <td><?= $no++ ?></td>
-                                                <td><?= htmlspecialchars($transaksi['kode_invoice']); ?></td>
-                                                <td><?= htmlspecialchars($transaksi['nama_member']); ?></td>
-                                                <td><?= htmlspecialchars($transaksi['status']); ?></td>
-                                                <td><?= htmlspecialchars($transaksi['status_bayar']); ?></td>
-                                                <td><?= htmlspecialchars($transaksi['total_harga']); ?></td>
-                                                <td align="center">
-                                                    <a href="transaksi_detail.php?id=<?= htmlspecialchars($transaksi['id_transaksi']); ?>" data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+        <div id="page-wrapper"> 
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Dashboard</h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Dashboard</a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <!-- ============================================================== -->
+    <!-- Different data widgets -->
+    <!-- ============================================================== -->
+    <!-- .row -->
+    <div class="row">
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Outlet</h3>
+                <ul class="list-inline two-part">
+                    <li>
+                        <div id="sparklinedash"></div>
+                    </li>
+                    <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">2</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Pelanggan</h3>
+                <ul class="list-inline two-part">
+                    <li>
+                        <div id="sparklinedash2"></div>
+                    </li>
+                    <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">1</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Transaksi</h3>
+                <ul class="list-inline two-part">
+                    <li>
+                        <div id="sparklinedash3"></div>
+                    </li>
+                    <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">2</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">10 Transaksi Terbaru</h3>
+                <div class="table-responsive">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Invoice</th>
+                                <th>Member</th>
+                                <th>Status</th>
+                                <th>Pemabayaran</th>
+                                <th>Total Harga</th>
+                                <th width="15%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php $no = 1; foreach ($data as $transaksi): ?>
+                         <tr>
+        <td><?= $no++ ?></td>
+        <td><?= htmlspecialchars($transaksi['kode_invoice']) ?></td>
+        <td><?= htmlspecialchars($transaksi['nama_member']) ?></td>
+        <td><?= htmlspecialchars($transaksi['status']) ?></td>
+        <td><?= htmlspecialchars($transaksi['status_bayar']) ?></td>
+        <td><?= htmlspecialchars($transaksi['total_harga']) ?></td>
+        <td align="center">
+            <a href="transaksi_detail.php?id=<?= htmlspecialchars($transaksi['id_transaksi']) ?>"
+               data-toggle="tooltip" data-placement="bottom" title="Edit" class="btn btn-success btn-block">Detail</a>
+        </td>
+    </tr>
+<?php endforeach; ?>
+                                                    </tbody>
+                    </table>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<footer class="footer text-center"> 2023 &copy; SMK Pembangunan Jaya YAKAPI </footer>
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
@@ -263,65 +263,62 @@ $data = ambildata($conn, $query);
     <script src="../assets/js/custom.min.js"></script>
     <script src="../assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
     <script>
-        $('#btn_hapus').on('click', () => {
+        $('#btn_hapus').on('click',() => {
             return confirm('Yakin Menghapus data ?');
         });
-        $(document).ready(function() {
+        $(document).ready( function () {
             $('[data-toggle="tooltip"]').tooltip();
             var t = $('#table').DataTable({
-                "columnDefs": [{
+                "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
                     "targets": 0
-                }],
-                "order": [
-                    [1, 'asc']
-                ],
-                "language": {
-                    "sProcessing": "Sedang memproses ...",
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecord": "Maaf data tidak tersedia",
-                    "info": "Menampilkan _PAGE_ halaman dari _PAGES_ halaman",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total data)",
-                    "sSearch": "Cari",
-                    "oPaginate": {
-                        "sFirst": "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext": "Selanjutnya",
-                        "sLast": "Terakhir"
+                } ],
+                "order": [[ 1, 'asc' ]],
+                "language" : {
+                    "sProcessing" : "Sedang memproses ...",
+                    "lengthMenu" : "Tampilkan MENU data per halaman",
+                    "zeroRecord" : "Maaf data tidak tersedia",
+                    "info" : "Menampilkan PAGE halaman dari PAGES halaman",
+                    "infoEmpty" : "Tidak ada data yang tersedia",
+                    "infoFiltered" : "(difilter dari MAX total data)",
+                    "sSearch" : "Cari",
+                    "oPaginate" : {
+                        "sFirst" : "Pertama",
+                        "sPrevious" : "Sebelumnya",
+                        "sNext" : "Selanjutnya",
+                        "sLast" : "Terakhir"
                     }
                 }
             });
-            t.on('order.dt search.dt', function() {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
 
-
-        });
-        $('#btn-refresh').on('click', () => {
+            
+        } );
+        $('#btn-refresh').on('click',() => {
             $('#ic-refresh').addClass('fa-spin');
             var oldURL = window.location.href;
             var index = 0;
             var newURL = oldURL;
             index = oldURL.indexOf('?');
-            if (index == -1) {
+            if(index == -1){
                 window.location = window.location.href;
-
+                
             }
-            if (index != -1) {
-                window.location = oldURL.substring(0, index)
+            if(index != -1){
+                window.location = oldURL.substring(0,index)
             }
-
+            
         });
+
     </script>
 
     <br />
+<b>Warning</b>:  Undefined array key "crud" in <b>C:\xampp\htdocs\sepdullah\laundry\admin\layout_footer.php</b> on line <b>91</b><br />
 </body>
 
 </html>
